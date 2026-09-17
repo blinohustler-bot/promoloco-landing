@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Formulaire partenaire PromoLoco — qualification et prise de rendez-vous.">
+<meta name="robots" content="noindex, nofollow">
+<title>Formulaire partenaire PromoLoco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+</head>
+<body>
+<style>
+  /* ============================================================
+     PALETTE — variables CSS relevées sur partenaire.promoloco.ca
+     --red-promooco #FA1909 · --dark #1F1F1F
+     Le site commit sur noir + rouge : la maquette fait pareil.
+     ============================================================ */
+  :root{
+    --bg:#0E0E0D; --bg-2:#161615; --card:#1B1B19; --card-hi:#222220;
+    --line:#2C2C2A; --line-2:#413F3B;
+    --ink:#FFFFFF; --ink-2:#C2BEB8; --muted:#87837B;
+    --red:#FA1909; --red-2:#FF4438; --red-soft:#2B0C08; --red-glow:rgba(250,25,9,.22);
+    --ok:#3FD37E; --ok-soft:#0D2418; --ok-line:#1F6B42;
+    --r:10px;
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; text-size-adjust:100%}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased;
+    overflow-wrap:break-word; word-break:break-word;
+    -webkit-tap-highlight-color:transparent}
+  button,input{-webkit-tap-highlight-color:transparent; touch-action:manipulation}
+  .page{max-width:600px; margin:0 auto;
+    padding-left:max(18px, env(safe-area-inset-left));
+    padding-right:max(18px, env(safe-area-inset-right));
+    padding-top:0; padding-bottom:calc(56px + env(safe-area-inset-bottom))}
+  /* iPad / desktop : la colonne respire un peu plus */
+  @media (min-width:900px){ .page{max-width:640px} }
+
+  /* ---------- en-tête ---------- */
+  .topbar{padding-block:18px 14px; display:flex; align-items:center; gap:10px;
+    justify-content:space-between; flex-wrap:wrap}
+  .logo{flex:0 0 auto; font-family:Archivo,sans-serif; font-weight:900; color:var(--ink);
+    text-transform:uppercase; line-height:.88; letter-spacing:-.045em}
+  .logo .l1{display:flex; align-items:center; gap:1px; font-size:21px}
+  .logo .l1 svg{display:block; margin-bottom:2px}
+  .logo .l2{display:block; font-size:13px; letter-spacing:.26em; font-weight:800; margin-top:3px}
+  .demo{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:9.5px; font-weight:700;
+    letter-spacing:.06em; color:var(--muted); border:1px solid var(--line-2); border-radius:3px;
+    padding:3px 7px; text-align:right; line-height:1.4}
+  @media (max-width:410px){ .demo{display:none} }
+
+  /* ---------- progression + retour ---------- */
+  .navrow{display:flex; align-items:center; gap:12px; margin-bottom:10px; min-height:26px}
+  .backbtn{flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; background:none;
+    border:1px solid var(--line); border-radius:99px; color:var(--muted); font:inherit;
+    font-size:12.5px; font-weight:600; padding:5px 12px 5px 9px; cursor:pointer;
+    transition:border-color .13s, color .13s}
+  .backbtn:hover{border-color:var(--line-2); color:var(--ink)}
+  .backbtn[hidden]{display:none}
+  .navrow .steps{margin-left:auto; font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:11.5px; color:var(--muted); letter-spacing:.04em; white-space:nowrap}
+  .prog{height:3px; background:var(--line); border-radius:99px; overflow:hidden; margin-bottom:26px}
+  .prog span{display:block; height:100%; background:var(--red); width:0%;
+    transition:width .34s cubic-bezier(.4,0,.2,1)}
+
+  /* ---------- écrans ---------- */
+  .screen{display:none}
+  .screen.on{display:block; animation:slidein .26s cubic-bezier(.16,1,.3,1) both}
+  @keyframes slidein{from{opacity:0; transform:translateX(14px)} to{opacity:1; transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    .screen.on{animation:none} .prog span{transition:none}
+    .opt,.btn,.mark{transition:none !important}
+  }
+
+  .kicker{display:flex; align-items:center; gap:9px; font-family:Archivo,sans-serif; font-size:11px;
+    font-weight:800; letter-spacing:.15em; text-transform:uppercase; color:var(--ink-2); margin:0 0 13px}
+  .kicker::before{content:""; width:16px; height:2px; background:var(--red); flex:0 0 auto}
+  h1{font-family:Archivo,sans-serif; font-size:clamp(26px,6.6vw,35px); line-height:1.07; font-weight:800;
+    letter-spacing:-.034em; margin:0 0 11px; text-wrap:balance}
+  .sub{font-size:15.5px; color:var(--ink-2); margin:0 0 24px; max-width:44ch}
+
+  /* ---------- accroche de départ ---------- */
+  .hero{border:1px solid var(--line); border-radius:var(--r); background:
+    linear-gradient(160deg, rgba(250,25,9,.08), transparent 62%), var(--bg-2);
+    padding:17px 18px; margin-bottom:26px}
+  .hero b{display:block; font-family:Archivo,sans-serif; font-size:16.5px; font-weight:800;
+    letter-spacing:-.022em; line-height:1.24; margin-bottom:6px}
+  .hero p{margin:0; font-size:13.5px; color:var(--ink-2); line-height:1.45}
+  @media (max-width:420px){
+    .hero{padding:14px 15px; margin-bottom:20px}
+    .hero b{font-size:15.5px}
+    .hero p{font-size:13px}
+    .sub{margin-bottom:20px}
+  }
+
+  /* ---------- options ---------- */
+  .opts{display:grid; gap:9px}
+  .opt{display:flex; align-items:center; gap:13px; width:100%; text-align:left;
+    -webkit-user-select:none; user-select:none; -webkit-appearance:none; appearance:none;
+    background:var(--card); border:1.5px solid var(--line); border-radius:var(--r);
+    padding:15px 16px; min-height:62px; font:inherit; font-weight:600; color:var(--ink);
+    cursor:pointer; position:relative;
+    transition:border-color .14s, background .14s, transform .09s, box-shadow .14s}
+  .opt:hover{background:var(--card-hi); border-color:var(--line-2)}
+  .opt:active{transform:scale(.988)}
+  .opt[aria-pressed="true"]{border-color:var(--red); background:var(--red-soft);
+    box-shadow:0 0 0 3px var(--red-glow)}
+  .opt .mark{flex:0 0 22px; height:22px; border:1.5px solid var(--line-2); border-radius:50%;
+    display:grid; place-items:center; transition:border-color .14s, background .14s}
+  .opt[aria-pressed="true"] .mark{border-color:var(--red); background:var(--red)}
+  .opt[aria-pressed="true"] .mark::after{content:""; width:8px; height:8px; border-radius:50%;
+    background:#fff; animation:pop .19s cubic-bezier(.2,1.4,.4,1) both}
+  @keyframes pop{from{transform:scale(0)} to{transform:scale(1)}}
+  .opt .txt{flex:1; min-width:0}
+  .opt .hint{display:block; font-weight:500; font-size:12.5px; color:var(--muted); margin-top:3px}
+  .opt .key{flex:0 0 auto; font-family:ui-monospace,monospace; font-size:10.5px; color:var(--muted);
+    border:1px solid var(--line); border-radius:4px; padding:2px 6px; opacity:.75}
+  @media (hover:none){ .opt .key{display:none} }
+
+  /* ---------- champs ---------- */
+  .field{margin-bottom:13px}
+  label{display:block; font-family:Archivo,sans-serif; font-size:11px; font-weight:800;
+    letter-spacing:.1em; text-transform:uppercase; margin-bottom:7px; color:var(--ink-2)}
+  input{width:100%; font:inherit; font-size:16px; padding:15px; border:1.5px solid var(--line);
+    border-radius:var(--r); background:var(--card); color:var(--ink); min-height:56px;
+    -webkit-appearance:none; appearance:none;
+    transition:border-color .14s, box-shadow .14s}
+  input:focus{outline:none; border-color:var(--red); box-shadow:0 0 0 3px var(--red-glow)}
+  input::placeholder{color:var(--muted)}
+  input[aria-invalid="true"]{border-color:var(--red-2)}
+  .err{color:var(--red-2); font-size:13.5px; font-weight:700; margin:9px 0 0; min-height:20px}
+
+  /* ---------- preuve ---------- */
+  .proof{display:flex; gap:0; border:1px solid var(--line); border-radius:var(--r);
+    background:var(--bg-2); overflow:hidden; margin-bottom:22px}
+  .proof div{flex:1; padding:12px 10px; text-align:center; border-right:1px solid var(--line)}
+  .proof div:last-child{border-right:none}
+  .proof .n{font-family:Archivo,sans-serif; font-weight:800; font-size:17px; letter-spacing:-.025em;
+    line-height:1.1}
+  .proof .l{font-size:10.5px; color:var(--muted); margin-top:3px; line-height:1.3}
+
+  /* ---------- boutons ---------- */
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:9px; width:100%;
+    -webkit-appearance:none; appearance:none;
+    background:var(--red); color:#fff; border:none; border-radius:var(--r); padding:17px 20px;
+    font-family:Archivo,sans-serif; font-weight:800; font-size:16.5px; letter-spacing:-.012em;
+    cursor:pointer; min-height:58px; transition:filter .14s, transform .09s}
+  .btn:hover{filter:brightness(1.13)}
+  .btn:active{transform:scale(.99)}
+  .microcta{text-align:center; font-size:12.5px; color:var(--muted); margin:11px 0 0}
+
+  /* ---------- réassurance ---------- */
+  .reassure{background:var(--bg-2); border:1px solid var(--line); border-left:3px solid var(--red);
+    border-radius:0 var(--r) var(--r) 0; padding:14px 16px; margin-bottom:20px}
+  .reassure b{display:block; font-family:Archivo,sans-serif; font-size:14.5px; font-weight:800;
+    letter-spacing:-.017em; margin-bottom:4px; line-height:1.3}
+  .reassure p{margin:0; font-size:13.5px; color:var(--ink-2); line-height:1.45}
+
+  /* ---------- fin ---------- */
+  .verdict{border:1.5px solid var(--line); border-radius:var(--r); background:var(--bg-2);
+    padding:26px 22px; margin-bottom:16px; text-align:center}
+  .verdict.go{border-color:var(--ok-line); background:var(--ok-soft)}
+  .ring{position:relative; width:118px; height:118px; margin:0 auto 16px}
+  .ring svg{transform:rotate(-90deg); display:block}
+  .ring .val{position:absolute; top:0; right:0; bottom:0; left:0; display:flex;
+    align-items:center; justify-content:center;
+    font-family:Archivo,sans-serif; font-weight:900; font-size:38px; letter-spacing:-.045em}
+  .ring .val small{font-size:15px; font-weight:800; opacity:.42}
+  .verdict h2{font-family:Archivo,sans-serif; font-size:22px; font-weight:800; letter-spacing:-.028em;
+    margin:0 0 7px; line-height:1.15}
+  .verdict p{margin:0 auto; font-size:14.5px; color:var(--ink-2); max-width:38ch}
+
+  .cal{border:2px dashed var(--line-2); border-radius:var(--r); padding:28px 20px; text-align:center;
+    color:var(--muted); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px; line-height:1.75}
+  .cal b{display:block; font-family:Archivo,sans-serif; font-size:15px; font-weight:800;
+    color:var(--ink-2); margin-bottom:9px; letter-spacing:-.012em}
+  .restart{display:block; width:100%; background:none; border:1px solid var(--line); border-radius:var(--r);
+    color:var(--muted); font:inherit; font-size:13.5px; font-weight:600; padding:13px; cursor:pointer; margin-top:16px}
+  .restart:hover{border-color:var(--line-2); color:var(--ink)}
+
+  /* ---------- panneau de test ---------- */
+  .dbg{margin-top:34px; border:1px solid var(--line); border-radius:var(--r); background:var(--bg-2); overflow:hidden}
+  .dbg>summary{cursor:pointer; padding:13px 15px; font-family:Archivo,sans-serif; font-size:11px;
+    font-weight:800; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); list-style:none}
+  .dbg>summary::-webkit-details-marker{display:none}
+  .dbg>summary::before{content:"▸ "; color:var(--red)}
+  .dbg[open]>summary::before{content:"▾ "}
+  .dbg .body{padding:0 15px 16px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:12px; line-height:1.7; color:var(--ink-2)}
+  .dbg .body b{color:var(--ink)}
+  .dbg table{width:100%; border-collapse:collapse; font-size:11.5px; margin-top:8px}
+  .dbg td{padding:4px 0; border-bottom:1px solid var(--line); vertical-align:top}
+  .dbg td:first-child{color:var(--muted); padding-right:12px; white-space:nowrap}
+  .tagpill{display:inline-block; background:var(--red-soft); color:var(--red-2); border:1px solid var(--red);
+    border-radius:3px; padding:2px 7px; font-size:10.5px; font-weight:700; margin:0 4px 4px 0}
+
+  /* ---------- note dev ---------- */
+  .devnote{margin-top:30px; border-top:1px solid var(--line); padding-top:22px;
+    font-size:13.5px; color:var(--ink-2); line-height:1.62}
+  .devnote h3{display:flex; align-items:center; gap:9px; font-family:Archivo,sans-serif; font-size:11.5px;
+    font-weight:800; letter-spacing:.13em; text-transform:uppercase; color:var(--muted); margin:0 0 13px}
+  .devnote h3::before{content:""; width:16px; height:2px; background:var(--red); flex:0 0 auto}
+  .devnote ol,.devnote ul{margin:0 0 14px; padding-left:20px}
+  .devnote li{margin-bottom:9px}
+  .devnote b{color:var(--ink)}
+  .devnote code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px;
+    background:var(--card); border:1px solid var(--line); padding:1.5px 5px; border-radius:3px; color:var(--ink)}
+  .swatches{display:flex; flex-wrap:wrap; gap:7px; margin:10px 0 4px}
+  .sw{display:flex; align-items:center; gap:7px; border:1px solid var(--line); border-radius:5px;
+    padding:5px 9px 5px 6px; font-family:ui-monospace,monospace; font-size:11px; color:var(--ink-2)}
+  .sw i{width:15px; height:15px; border-radius:3px; display:block; flex:0 0 auto}
+
+  :focus-visible{outline:2px solid var(--red-2); outline-offset:2px}
+</style>
+
+<div class="page">
+
+  <div class="topbar">
+    <div class="logo" aria-label="PromoLoco">
+      <span class="l1" aria-hidden="true">Prom<svg width="16" height="21" viewBox="0 0 15 20">
+        <path d="M7.5 0C3.36 0 0 3.36 0 7.5 0 13.1 7.5 20 7.5 20S15 13.1 15 7.5C15 3.36 11.64 0 7.5 0Z" fill="#FA1909"/>
+        <circle cx="7.5" cy="7.3" r="2.7" fill="#0E0E0D"/>
+      </svg></span>
+      <span class="l2" aria-hidden="true">Loco</span>
+    </div>
+    <div class="demo">MAQUETTE — structure + 70 % du look</div>
+  </div>
+
+  <div class="navrow">
+    <button type="button" class="backbtn" id="back" hidden>← Retour</button>
+    <span class="steps" id="steps">Étape 1 sur 6</span>
+  </div>
+  <div class="prog"><span id="bar"></span></div>
+
+  <form id="form" novalidate>
+
+  <!-- ===== 1 — NICHE ===== -->
+  <section class="screen on" data-key="niche" data-type="choice">
+    <div class="hero">
+      <b>Des clients du quartier, livrés chez vous.</b>
+      <p>Payé à la performance. Tu payes seulement pour les clients qui se présentent.</p>
+    </div>
+    <p class="kicker">Étape 1</p>
+    <h1>T'es dans quel domaine&nbsp;?</h1>
+    <p class="sub">Ça nous dit quelles questions te poser ensuite. Un seul tap.</p>
+    <div class="opts">
+      <button type="button" class="opt" data-v="mecanique"><span class="mark"></span><span class="txt">Mécanique générale / entretien</span><span class="key">1</span></button>
+      <button type="button" class="opt" data-v="esthetique"><span class="mark"></span><span class="txt">Esthétique automobile / detailing</span><span class="key">2</span></button>
+      <button type="button" class="opt" data-v="lavage"><span class="mark"></span><span class="txt">Lave-auto<span class="hint">tunnel ou portique</span></span><span class="key">3</span></button>
+      <button type="button" class="opt" data-v="concession"><span class="mark"></span><span class="txt">Concession automobile</span><span class="key">4</span></button>
+      <button type="button" class="opt" data-v="carrosserie"><span class="mark"></span><span class="txt">Carrosserie</span><span class="key">5</span></button>
+      <button type="button" class="opt" data-v="pneus"><span class="mark"></span><span class="txt">Pneus</span><span class="key">6</span></button>
+      <button type="button" class="opt" data-v="autre"><span class="mark"></span><span class="txt">Autre</span><span class="key">7</span></button>
+    </div>
+  </section>
+
+  <!-- ===== 2 — COORDONNÉES ===== -->
+  <section class="screen" data-key="contact" data-type="fields">
+    <p class="kicker">Étape 2</p>
+    <h1>On parle à qui&nbsp;?</h1>
+    <div class="proof">
+      <div><div class="n">50+</div><div class="l">garages<br>partenaires</div></div>
+      <div><div class="n">4,9/5</div><div class="l">note des<br>partenaires</div></div>
+      <div><div class="n">340+</div><div class="l">représentants<br>sur la route</div></div>
+    </div>
+    <div class="reassure">
+      <b>Tu payes rien tant qu'un client s'est pas présenté chez vous.</b>
+      <p>Aucun frais fixe. On t'appelle 15 minutes pour valider ton secteur, pis c'est tout.</p>
+    </div>
+    <div class="field">
+      <label for="f-nom">Prénom et nom</label>
+      <input id="f-nom" name="nom" type="text" autocomplete="name" placeholder="Martin Tremblay">
+    </div>
+    <div class="field">
+      <label for="f-tel">Téléphone</label>
+      <input id="f-tel" name="tel" type="tel" autocomplete="tel" inputmode="tel" maxlength="12" placeholder="514 555-0123">
+    </div>
+    <div class="field">
+      <label for="f-email">Courriel</label>
+      <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="martin@garagetremblay.ca">
+    </div>
+    <p class="err" id="err-contact"></p>
+    <button type="button" class="btn" id="go-contact">Continuer <span aria-hidden="true">→</span></button>
+    <p class="microcta">Aucun engagement · aucune carte requise</p>
+  </section>
+
+  <!-- ===== 3 — CAPACITÉ ===== -->
+  <section class="screen" data-key="capacite" data-type="choice">
+    <p class="kicker">Étape 3</p>
+    <h1>Combien de nouveaux clients de plus tu peux prendre par mois&nbsp;?</h1>
+    <p class="sub">Sans engager personne de plus. On veut être sûrs que le volume qu'on t'envoie te mette pas dans le trouble.</p>
+    <div class="opts">
+      <button type="button" class="opt" data-v="50plus"><span class="mark"></span><span class="txt">Plus de 50</span><span class="key">1</span></button>
+      <button type="button" class="opt" data-v="20a50"><span class="mark"></span><span class="txt">Entre 20 et 50</span><span class="key">2</span></button>
+      <button type="button" class="opt" data-v="10a20"><span class="mark"></span><span class="txt">Entre 10 et 20</span><span class="key">3</span></button>
+      <button type="button" class="opt" data-v="moins10"><span class="mark"></span><span class="txt">Moins de 10</span><span class="key">4</span></button>
+    </div>
+  </section>
+
+  <!-- ===== 4 — LIEU ===== -->
+  <section class="screen" data-key="lieu" data-type="choice">
+    <p class="kicker">Étape 4</p>
+    <h1>Où tes clients laissent leur véhicule&nbsp;?</h1>
+    <div class="opts">
+      <button type="button" class="opt" data-v="local"><span class="mark"></span><span class="txt">À mon local commercial</span><span class="key">1</span></button>
+      <button type="button" class="opt" data-v="deux"><span class="mark"></span><span class="txt">Les deux<span class="hint">j'ai un local et je me déplace aussi</span></span><span class="key">2</span></button>
+      <button type="button" class="opt" data-v="mobile"><span class="mark"></span><span class="txt">Je me déplace chez le client<span class="hint">service mobile</span></span><span class="key">3</span></button>
+    </div>
+  </section>
+
+  <!-- ===== 5 — AUTORITÉ ===== -->
+  <section class="screen" data-key="autorite" data-type="choice">
+    <p class="kicker">Étape 5</p>
+    <h1>Qui décide des promotions chez vous&nbsp;?</h1>
+    <div class="opts">
+      <button type="button" class="opt" data-v="moi"><span class="mark"></span><span class="txt">Moi</span><span class="key">1</span></button>
+      <button type="button" class="opt" data-v="associe"><span class="mark"></span><span class="txt">Moi, avec un associé</span><span class="key">2</span></button>
+      <button type="button" class="opt" data-v="siege"><span class="mark"></span><span class="txt">Le siège social ou la bannière</span><span class="key">3</span></button>
+      <button type="button" class="opt" data-v="demander"><span class="mark"></span><span class="txt">Je dois demander au propriétaire</span><span class="key">4</span></button>
+    </div>
+  </section>
+
+  <!-- ===== 6 — ANCIENNETÉ ===== -->
+  <section class="screen" data-key="anciennete" data-type="choice">
+    <p class="kicker">Étape 6</p>
+    <h1>Depuis quand t'es ouvert&nbsp;?</h1>
+    <div class="opts">
+      <button type="button" class="opt" data-v="10plus"><span class="mark"></span><span class="txt">Plus de 10 ans</span><span class="key">1</span></button>
+      <button type="button" class="opt" data-v="6a10"><span class="mark"></span><span class="txt">6 à 10 ans</span><span class="key">2</span></button>
+      <button type="button" class="opt" data-v="3a5"><span class="mark"></span><span class="txt">3 à 5 ans</span><span class="key">3</span></button>
+      <button type="button" class="opt" data-v="1a2"><span class="mark"></span><span class="txt">1 à 2 ans</span><span class="key">4</span></button>
+      <button type="button" class="opt" data-v="moins1"><span class="mark"></span><span class="txt">Moins d'un an</span><span class="key">5</span></button>
+    </div>
+  </section>
+
+  <!-- ===== 7 — CONCESSION : service ===== -->
+  <section class="screen" data-key="service" data-type="choice" data-only="concession">
+    <p class="kicker">Étape 7</p>
+    <h1>Avez-vous un département de service&nbsp;?</h1>
+    <p class="sub">Mécanique ou esthétique — c'est là qu'un client du quartier revient le plus souvent.</p>
+    <div class="opts">
+      <button type="button" class="opt" data-v="public"><span class="mark"></span><span class="txt">Oui, ouvert au public</span><span class="key">1</span></button>
+      <button type="button" class="opt" data-v="interne"><span class="mark"></span><span class="txt">Oui, mais réservé à notre clientèle<span class="hint">seulement nos propres acheteurs</span></span><span class="key">2</span></button>
+      <button type="button" class="opt" data-v="aucun"><span class="mark"></span><span class="txt">Non, vente de véhicules seulement</span><span class="key">3</span></button>
+    </div>
+  </section>
+
+  <!-- ===== 8 — CONCESSION : marques (l'effet papillon) ===== -->
+  <section class="screen" data-key="marques" data-type="choice" data-only="concession" data-requires="service=public">
+    <p class="kicker">Étape 8</p>
+    <h1>Acceptez-vous les véhicules d'autres marques que la vôtre&nbsp;?</h1>
+    <div class="opts">
+      <button type="button" class="opt" data-v="toutes"><span class="mark"></span><span class="txt">Oui, toutes les marques</span><span class="key">1</span></button>
+      <button type="button" class="opt" data-v="surtout"><span class="mark"></span><span class="txt">Oui, mais surtout la nôtre</span><span class="key">2</span></button>
+      <button type="button" class="opt" data-v="notre"><span class="mark"></span><span class="txt">Non, notre marque uniquement</span><span class="key">3</span></button>
+    </div>
+  </section>
+
+  <!-- ===== 9 — CONCESSION : groupe ===== -->
+  <section class="screen" data-key="groupe" data-type="choice" data-only="concession">
+    <p class="kicker">Étape 9</p>
+    <h1>Combien de concessions détenez-vous&nbsp;?</h1>
+    <div class="opts">
+      <button type="button" class="opt" data-v="1"><span class="mark"></span><span class="txt">Une seule</span><span class="key">1</span></button>
+      <button type="button" class="opt" data-v="2a3"><span class="mark"></span><span class="txt">2 à 3</span><span class="key">2</span></button>
+      <button type="button" class="opt" data-v="4plus"><span class="mark"></span><span class="txt">4 et plus</span><span class="key">3</span></button>
+    </div>
+  </section>
+
+  <!-- ===== FIN ===== -->
+  <section class="screen" data-key="fin">
+    <div class="verdict" id="verdict">
+      <div class="ring">
+        <svg width="118" height="118" viewBox="0 0 118 118" aria-hidden="true">
+          <circle cx="59" cy="59" r="52" fill="none" stroke="#2C2C2A" stroke-width="8"/>
+          <circle id="ring-arc" cx="59" cy="59" r="52" fill="none" stroke="#FA1909" stroke-width="8"
+            stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7"
+            style="transition:stroke-dashoffset .9s cubic-bezier(.2,.8,.2,1)"/>
+        </svg>
+        <div class="val" id="score-num">0<small>/10</small></div>
+      </div>
+      <h2 id="verdict-titre"></h2>
+      <p id="verdict-texte"></p>
+    </div>
+    <div id="fin-go" hidden>
+      <div class="cal">
+        <b>Calendrier GHL — emplacement réservé</b>
+        widget de la niche choisie<br>
+        mecanique · xbtFcS6Os4ebiQWkWvcc<br>
+        lave-auto · y0RvpgktjxatzaAerrkX<br>
+        concession · bFYAzyGJOaRAcae6dbMV<br><br>
+        la réservation déclenche <b>Schedule</b> côté serveur
+      </div>
+    </div>
+    <button type="button" class="restart" id="restart">↺ Recommencer la maquette</button>
+  </section>
+
+  </form>
+
+  <details class="dbg" id="dbg">
+    <summary>Panneau de test — ce que le serveur recevrait</summary>
+    <div class="body">
+      <div id="dbg-tags"></div>
+      <table id="dbg-table"></table>
+      <p style="margin:12px 0 0"><b>note</b> = <span id="dbg-score">—</span>
+      &nbsp;·&nbsp; <b>seuil</b> = <span id="dbg-seuil">6</span>
+      &nbsp;·&nbsp; <b>événements</b> : <span id="dbg-events">—</span></p>
+    </div>
+  </details>
+
+  <div class="devnote">
+    <h3>Ce qu'il reste à brancher</h3>
+    <ol>
+      <li><b>Les fonctions d'événement</b> sont des coquilles vides en haut du script :
+        <code>fireLead()</code>, <code>fireCompleteRegistration()</code>,
+        <code>fireLeadQualifie()</code>. Chacune part <b>deux fois</b> — navigateur
+        (<code>fbq</code>) et serveur (CAPI) — avec le <b>même <code>event_id</code></b>, sinon
+        chaque lead compte double. <code>Schedule</code> ne part <b>pas</b> d'ici : workflow GHL
+        « Appointment Booked », parce que le calendrier est une iframe.</li>
+      <li><b>L'envoi partiel</b> après l'écran 2 : <code>postPartial()</code> crée le contact GHL
+        tout de suite. Celui qui abandonne à l'étape 5 doit rester rappelable.</li>
+      <li><b>Le calcul de la note reste côté serveur.</b> Celui d'ici sert à tester. L'objet
+        <code>CONFIG</code> se recopie tel quel au backend.</li>
+      <li><b>L'attribution</b> : <code>captureAttribution()</code> lit <code>fbclid</code> et
+        reconstruit <code>_fbc</code>. Poster <code>fbp</code>, <code>fbc</code>,
+        <code>event_id</code> et les UTM avec chaque envoi.</li>
+      <li><b>Les vraies polices.</b> Le site tourne sur <b>Clash Display</b> + <b>Satoshi</b>
+        (Fontshare). Ici ce sont des substituts Google (Archivo + Plus Jakarta Sans) parce que la
+        maquette ne peut charger que Google Fonts.</li>
+      <li><b>Le logo</b> est redessiné en SVG inline. Remplace-le par le vrai fichier — attention,
+        celui qu'on a sur disque est en <b>lettres blanches</b>, donc pour fond sombre seulement.</li>
+    </ol>
+
+    <h3 style="margin-top:22px">Ce que la reprise UX a changé</h3>
+    <ul>
+      <li><b>La progression reprend là où on l'a laissée.</b> Les réponses sont gardées dans le
+        navigateur : celui qui est interrompu au comptoir retrouve son formulaire. Rien n'est envoyé
+        tant qu'il n'a pas fini l'écran 2.</li>
+      <li><b>Le retour est en haut</b>, à côté du compteur d'étapes, pas au bas de la page.</li>
+      <li><b>Le téléphone se formate tout seul</b> pendant la frappe.</li>
+      <li><b>Les touches 1 à 7</b> choisissent une option au clavier (masquées sur mobile).</li>
+      <li><b>Les chiffres de preuve sont sur l'écran 2</b> — c'est là qu'on hésite, pas ailleurs.
+        Ce sont vos chiffres publiés : 50+ partenaires, 4,9/5, 340+ représentants.</li>
+      <li><b>La note se dévoile en anneau</b> à la fin, au lieu d'apparaître d'un coup.</li>
+    </ul>
+
+    <h3 style="margin-top:22px">Ce qui a été coupé, et pourquoi</h3>
+    <p style="margin:0 0 12px">La règle : <b>une question mérite sa place seulement si sa réponse
+    change ce qu'on fait avant l'appel.</b> Deux ne passaient pas le test.</p>
+    <ol>
+      <li><b>« Autour de ton commerce, c'est plutôt… » — coupée.</b> Elle valait <b>0 point</b>
+        parce qu'on ne connaît pas le rayon réel du porte-à-porte. Elle revient le jour où Étienne
+        donne le rayon.</li>
+      <li><b>« Combien de baies / véhicules par semaine » — coupée.</b> Double emploi avec
+        « combien de nouveaux clients de plus par mois », qui mesure la capacité <i>disponible</i> —
+        la seule qui compte.</li>
+    </ol>
+    <p style="margin:0 0 14px"><b>6 questions en mécanique (avant 8), 9 en concession (avant 11)</b>,
+    sous les 90 secondes — bien en dessous des « 3 min » annoncées sur votre page.</p>
+
+    <h3 style="margin-top:22px">Pourquoi la longueur ne coûte pas de leads</h3>
+    <p style="margin:0 0 12px">Le lead est enregistré à l'<b>écran 2</b>. Tout ce qui suit ne peut
+    plus faire perdre un lead — seulement une note et un rendez-vous. La seule question qui peut
+    coûter un lead est l'<b>écran 1</b>, et c'est un tap. <b>Personne n'est refusé</b> : les trois
+    verrous plafonnent la note à 3, ils ne ferment pas le formulaire.</p>
+
+    <h3 style="margin-top:22px">Compatibilité — ce qui a été fait pour ça</h3>
+    <ul>
+      <li><b>iOS ne zoome pas</b> à la mise au point d'un champ : tous les champs sont à 16 px,
+        c'est le seuil sous lequel Safari zoome de force.</li>
+      <li><b>Encoches et coins arrondis</b> : les marges latérales utilisent
+        <code>env(safe-area-inset-*)</code>, donc rien ne passe sous l'encoche en paysage.</li>
+      <li><b>Pas de flash gris au tap</b> sur iOS, pas de sélection de texte au double-tap,
+        et <code>touch-action:manipulation</code> pour enlever le délai de 300 ms des vieux iOS.</li>
+      <li><b>Champs et boutons</b> repassés en <code>appearance:none</code> — sinon iOS impose
+        ses coins et son ombre intérieure.</li>
+      <li><b>Pas de <code>vh</code> nulle part</b> : la barre d'adresse mobile ne casse rien.</li>
+      <li><b>Replis prévus</b> pour <code>crypto.randomUUID</code>, <code>scrollTo({})</code>,
+        <code>matchMedia</code> et <code>inset</code> — les quatre manquent sur Safari &lt; 15.</li>
+      <li><b>Le stockage local est dans un try/catch</b> : en navigation privée iOS il lève une
+        exception, et la page continue de marcher sans mémoire.</li>
+      <li><b>iPad et desktop</b> : colonne à 640 px au-delà de 900 px de large, le reste identique.</li>
+      <li>⚠️ <b>Si tu sors ce fichier de la maquette</b>, ajoute
+        <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code> —
+        il est fourni par l'hébergeur ici, pas par le fichier.</li>
+    </ul>
+
+    <h3 style="margin-top:22px">Palette — relevée sur votre site</h3>
+    <div class="swatches">
+      <span class="sw"><i style="background:#FA1909"></i>#FA1909 <span style="color:var(--muted)">red-promooco</span></span>
+      <span class="sw"><i style="background:#0E0E0D; border:1px solid #333"></i>#0E0E0D <span style="color:var(--muted)">fond</span></span>
+      <span class="sw"><i style="background:#E2231A"></i>#E2231A <span style="color:var(--muted)">nos créatifs</span></span>
+      <span class="sw"><i style="background:#FF0F00"></i>#FF0F00 <span style="color:var(--muted)">pixels du logo</span></span>
+    </div>
+    <p style="font-size:12.5px; color:var(--muted); margin:8px 0 0; line-height:1.6">
+      <b>⚠️ Trois rouges différents circulent.</b> <code>#FA1909</code> vient de votre propre
+      feuille de style, dans une variable que vous avez nommée <code>--red-promooco</code> — c'est
+      celui de cette maquette. <code>#E2231A</code> est celui de toutes nos affiches Meta depuis
+      août, mais il est marqué « estimé du logo, à confirmer » dans notre code et n'a jamais été
+      validé. <code>#FF0F00</code> est la couleur réelle des pixels du pin.
+      <b>Tranchez-en un et on aligne les pubs dessus.</b>
+    </p>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIG — tout ce qui se règle sans toucher au reste
+   ============================================================ */
+const CONFIG = {
+  seuil: 6,
+  plafondVerrou: 3,
+  poids: {
+    // CAPACITÉ — le seul critère publié par PromoLoco (« 20 à 50 nouveaux clients/mois minimum »)
+    capacite:   { '50plus':4, '20a50':3.5, '10a20':1.5, 'moins10':0 },
+    // LIEU — la promo se réclame en personne
+    lieu:       { 'local':3, 'deux':2, 'mobile':0 },
+    // AUTORITÉ — qui peut dire oui. Axe positif, pas une pénalité.
+    autorite:   { 'moi':3, 'associe':2.5, 'siege':0, 'demander':0 },
+    // ANCIENNETÉ — hypothèse non validée : simple malus
+    anciennete: { '10plus':0, '6a10':0, '3a5':0, '1a2':-0.5, 'moins1':-1 },
+    marques:    { 'toutes':0, 'surtout':0, 'notre':-2 },
+    groupe:     { '1':0, '2a3':0.5, '4plus':1 }
+  },
+  verrous: [
+    { si: r => r.lieu === 'mobile',                              motif:'sans_local' },
+    { si: r => r.capacite === 'moins10',                         motif:'sous_le_plancher' },
+    { si: r => r.service === 'interne' || r.service === 'aucun', motif:'service_interne' }
+  ]
+};
+
+/* ============================================================
+   HUGO — les coquilles à remplir
+   ============================================================ */
+const EVENTS = [];
+function log(n, d){ EVENTS.push(n); console.log('[event]', n, d || {}); paint(); }
+
+function captureAttribution(){
+  const p = new URLSearchParams(location.search);
+  const fbclid = p.get('fbclid');
+  if (fbclid) { try { document.cookie = `_fbc=fb.1.${Date.now()}.${fbclid}; path=/; max-age=7776000`; } catch(e){} }
+  const read = n => { try { return (document.cookie.match('(^|;)\\s*'+n+'=([^;]*)')||[])[2] || ''; } catch(e){ return ''; } };
+  return { fbp: read('_fbp'), fbc: read('_fbc'), utm: Object.fromEntries(p),
+           event_id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())) };
+}
+const ATTR = captureAttribution();
+
+function postPartial(d){ /* TODO Hugo — POST vers GHL, créer le contact */ log('→ POST partiel (GHL)', d); }
+function fireLead(d){                 /* TODO — fbq + CAPI, même event_id */ log('Lead', d); }
+function fireCompleteRegistration(d){ /* TODO — fbq + CAPI, même event_id */ log('CompleteRegistration', d); }
+function fireLeadQualifie(d){         /* TODO — CAPI seulement, si note >= seuil */ log('LeadQualifie', d); }
+
+/* ============================================================
+   MOTEUR
+   ============================================================ */
+const KEY = 'promoloco_form_v1';
+const R = {};
+const screens = [...document.querySelectorAll('.screen')];
+const byKey = k => screens.find(s => s.dataset.key === k);
+let cur = 0, history = [];
+
+function save(){ try { localStorage.setItem(KEY, JSON.stringify({ R, cur, history })); } catch(e){} }
+function load(){
+  try {
+    const d = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (!d || !d.R || !Object.keys(d.R).length) return false;
+    Object.assign(R, d.R);
+    history = Array.isArray(d.history) ? d.history : [];
+    const i = typeof d.cur === 'number' && screens[d.cur] ? d.cur : 0;
+    // on ne restaure pas l'écran final : on rejoue la dernière question
+    return screens[i].dataset.key === 'fin' ? false : i;
+  } catch(e){ return false; }
+}
+
+function visible(s){
+  if (s.dataset.only && R.niche !== s.dataset.only) return false;
+  if (s.dataset.requires){
+    const [k, v] = s.dataset.requires.split('=');
+    if (R[k] !== v) return false;
+  }
+  return true;
+}
+const path = () => screens.filter(visible);
+
+function calcule(){
+  const P = CONFIG.poids;
+  let n = 0;
+  n += P.capacite[R.capacite]     ?? 0;
+  n += P.lieu[R.lieu]             ?? 0;
+  n += P.autorite[R.autorite]     ?? 0;
+  n += P.anciennete[R.anciennete] ?? 0;
+  n += P.marques[R.marques]       ?? 0;
+  n += P.groupe[R.groupe]         ?? 0;
+  const motifs = CONFIG.verrous.filter(v => v.si(R)).map(v => v.motif);
+  n = Math.max(0, Math.min(10, n));
+  if (motifs.length) n = Math.min(n, CONFIG.plafondVerrou);
+  return { note: Math.round(n * 10) / 10, motifs };
+}
+
+function paint(){
+  const p = path();
+  const idx = p.indexOf(screens[cur]);
+  const fin = screens[cur].dataset.key === 'fin';
+  const tot = p.length - 1;
+  document.getElementById('bar').style.width = (fin ? 100 : Math.round((idx / tot) * 100)) + '%';
+  document.getElementById('steps').textContent = fin ? 'Terminé' : 'Étape ' + (idx + 1) + ' sur ' + tot;
+  document.getElementById('back').hidden = history.length === 0 || fin;
+
+  const { note, motifs } = calcule();
+  document.getElementById('dbg-score').textContent = note;
+  document.getElementById('dbg-seuil').textContent = CONFIG.seuil;
+  document.getElementById('dbg-events').textContent = EVENTS.length ? EVENTS.join(' · ') : '—';
+  document.getElementById('dbg-tags').innerHTML = motifs.length
+    ? motifs.map(m => '<span class="tagpill">VERROU ' + m + '</span>').join('')
+    : '<span style="color:var(--muted)">aucun verrou</span>';
+  document.getElementById('dbg-table').innerHTML = Object.keys(R).length
+    ? Object.entries(R).map(([k, v]) => '<tr><td>' + k + '</td><td><b>' + v + '</b></td></tr>').join('')
+    : '<tr><td colspan="2" style="color:var(--muted)">aucune réponse</td></tr>';
+}
+
+function markChosen(s){
+  const v = R[s.dataset.key];
+  s.querySelectorAll('.opt').forEach(o =>
+    o.setAttribute('aria-pressed', String(o.dataset.v === v)));
+}
+
+function show(i, instant){
+  screens.forEach(s => s.classList.remove('on'));
+  cur = i;
+  screens[i].classList.add('on');
+  markChosen(screens[i]);
+  if (screens[i].dataset.key === 'fin') finir();
+  paint(); save();
+  try { window.scrollTo({ top: 0, behavior: instant ? 'auto' : 'smooth' }); }
+  catch(e){ window.scrollTo(0, 0); }
+  if (!instant){
+    const f = screens[i].querySelector('.opt, input, .btn');
+    if (f) f.focus({ preventScroll: true });
+  }
+}
+
+function next(){
+  const p = path();
+  const nxt = p[p.indexOf(screens[cur]) + 1];
+  history.push(cur);
+  show(screens.indexOf(nxt || byKey('fin')));
+}
+
+function wire(root, key){
+  root.querySelectorAll('.opt').forEach(b => {
+    b.addEventListener('click', () => {
+      root.querySelectorAll('.opt').forEach(o => o.setAttribute('aria-pressed', 'false'));
+      b.setAttribute('aria-pressed', 'true');
+      R[key] = b.dataset.v;
+      if (key === 'service' && b.dataset.v !== 'public') delete R.marques;
+      paint(); save();
+      setTimeout(next, 210);
+    });
+  });
+}
+screens.forEach(s => { if (s.dataset.type === 'choice') wire(s, s.dataset.key); });
+
+/* clavier : 1..9 choisit une option */
+document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const ae = document.activeElement;
+  if (ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)) return;
+  const n = parseInt(e.key, 10);
+  if (!n) return;
+  const opts = screens[cur].querySelectorAll('.opt');
+  if (opts[n - 1]) { e.preventDefault(); opts[n - 1].click(); }
+});
+
+/* téléphone : formatage pendant la frappe */
+const tel = document.getElementById('f-tel');
+tel.addEventListener('input', () => {
+  const d = tel.value.replace(/\D/g, '').slice(0, 10);
+  tel.value = d.length > 6 ? `${d.slice(0,3)} ${d.slice(3,6)}-${d.slice(6)}`
+            : d.length > 3 ? `${d.slice(0,3)} ${d.slice(3)}`
+            : d;
+});
+
+document.getElementById('go-contact').addEventListener('click', () => {
+  const nom   = document.getElementById('f-nom').value.trim();
+  const telD  = tel.value.replace(/\D/g, '');
+  const email = document.getElementById('f-email').value.trim();
+  const err   = document.getElementById('err-contact');
+  const bad   = el => { el.setAttribute('aria-invalid','true'); el.focus(); };
+  ['f-nom','f-tel','f-email'].forEach(id => document.getElementById(id).removeAttribute('aria-invalid'));
+  if (nom.length < 2)  { err.textContent = 'On a besoin de ton nom.'; bad(document.getElementById('f-nom')); return; }
+  if (telD.length < 10){ err.textContent = 'Un numéro à 10 chiffres, s\'il te plaît.'; bad(tel); return; }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { err.textContent = 'Ce courriel a l\'air incomplet.'; bad(document.getElementById('f-email')); return; }
+  err.textContent = '';
+  Object.assign(R, { nom, tel: telD, email });
+  postPartial({ nom, tel: telD, email, niche: R.niche, ...ATTR });
+  fireLead({ niche: R.niche, event_id: ATTR.event_id });
+  next();
+});
+
+function finir(){
+  const { note, motifs } = calcule();
+  const ok = note >= CONFIG.seuil && motifs.length === 0;
+  const v = document.getElementById('verdict');
+  v.className = 'verdict ' + (ok ? 'go' : 'hold');
+
+  const arc = document.getElementById('ring-arc');
+  const C = 326.7;
+  arc.setAttribute('stroke', ok ? '#3FD37E' : '#FA1909');
+  const el = document.getElementById('score-num');
+  let reduce = false;
+  try { reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
+  if (reduce){
+    arc.style.strokeDashoffset = C - (note / 10) * C;
+    el.innerHTML = note + '<small>/10</small>';
+  } else {
+    requestAnimationFrame(() => { arc.style.strokeDashoffset = C - (note / 10) * C; });
+    const t0 = performance.now(), dur = 850;
+    (function tick(t){
+      const k = Math.min(1, (t - t0) / dur);
+      const e = 1 - Math.pow(1 - k, 3);
+      el.innerHTML = (Math.round(note * e * 10) / 10) + '<small>/10</small>';
+      if (k < 1) requestAnimationFrame(tick);
+    })(t0);
+  }
+
+  document.getElementById('verdict-titre').textContent = ok
+    ? 'Ton secteur est admissible.' : 'Merci — on te rappelle.';
+  document.getElementById('verdict-texte').textContent = ok
+    ? 'Choisis un moment pour l\'appel de 15 minutes. On valide ton secteur pis on part la campagne.'
+    : 'Un membre de l\'équipe va t\'appeler pour voir ce qu\'on peut faire dans ton cas.';
+  document.getElementById('fin-go').hidden = !ok;
+
+  fireCompleteRegistration({ note, niche: R.niche, event_id: ATTR.event_id });
+  if (ok) fireLeadQualifie({ note, niche: R.niche, event_id: ATTR.event_id });
+}
+
+document.getElementById('back').addEventListener('click', () => { if (history.length) show(history.pop()); });
+document.getElementById('restart').addEventListener('click', () => {
+  try { localStorage.removeItem(KEY); } catch(e){}
+  location.reload();
+});
+document.getElementById('form').addEventListener('submit', e => e.preventDefault());
+
+/* reprise */
+const resume = load();
+if (resume !== false) show(resume, true); else paint();
+</script>
+
+</body>
+</html>
