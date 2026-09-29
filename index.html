@@ -3,496 +3,424 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>PromoLoco — Devenir partenaire</title>
-<meta name="description" content="Des clients du quartier, livrés à ton garage. Payé à la performance, aucun frais fixe. Vérifie si ton secteur est disponible en 2 minutes.">
-<meta name="theme-color" content="#141413">
-<meta property="og:title" content="PromoLoco — Des clients du quartier, livrés à ton garage">
-<meta property="og:description" content="Payé à la performance. Tu payes seulement pour les clients qui se présentent.">
+<title>PromoLoco — Un seul garage par secteur</title>
+<meta name="description" content="On prend un seul garage par secteur. Vérifie si le tien est encore libre en 2 minutes. Payé à la performance, aucun frais fixe.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#131312">
+<meta property="og:title" content="PromoLoco — Un seul garage par secteur">
+<meta property="og:description" content="Vérifie si ton secteur est encore libre. Tu payes seulement pour les clients qui se présentent.">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/favicon-256.png">
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&display=swap">
+<link rel="preconnect" href="https://api.leadconnectorhq.com">
+<!-- Fontshare ne sert qu'une famille par requête -->
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@600&display=swap">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap">
-<!-- Montserrat : uniquement les 5 lettres du logo -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&text=PROMLC&display=block">
 <style>
   :root{
-    --bg:#141413; --bg-2:#1A1A18; --card:#1F1F1D; --card-hi:#272724;
-    --line:#2F2E2B; --line-2:#46443F;
-    --ink:#F6F4F0; --ink-2:#C4BFB7; --muted:#8E8980;
-    --red:#FA1909; --red-2:#FF4A3D; --red-soft:#2A0F0B; --red-glow:rgba(250,25,9,.24);
+    --bg:#131312; --bg-2:#1A1A18; --card:#201F1D; --card-hi:#282725;
+    --line:#302F2C; --line-2:#4A4843;
+    --ink:#F6F4F0; --ink-2:#C9C4BC; --muted:#948F86;
+    --red:#FA1909; --red-2:#FF5246; --red-soft:#2C0F0B; --red-glow:rgba(250,25,9,.26);
     --ok:#3FD37E;
     --display:"Clash Display","Arial Narrow",Arial,sans-serif;
     --text:"Satoshi",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
     --r:12px;
-    --gutter:max(18px, env(safe-area-inset-left));
     color-scheme:dark;
   }
   *{box-sizing:border-box}
-  html{-webkit-text-size-adjust:100%; text-size-adjust:100%; scroll-behavior:smooth}
-  body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--text);
-    font-size:16px; line-height:1.55; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  html{-webkit-text-size-adjust:100%; text-size-adjust:100%}
+  body{margin:0; min-height:100%; background:var(--bg); color:var(--ink); font-family:var(--text);
+    font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased; overflow-x:hidden;
     -webkit-tap-highlight-color:transparent}
-  button,input,summary{-webkit-tap-highlight-color:transparent; touch-action:manipulation}
+  button,input,summary,a{-webkit-tap-highlight-color:transparent; touch-action:manipulation}
   ::selection{background:var(--red); color:#fff}
   :focus-visible{outline:2px solid var(--red-2); outline-offset:3px}
   a{color:inherit}
-  .wrap{max-width:1200px; margin:0 auto; padding-inline:var(--gutter) max(18px, env(safe-area-inset-right))}
-  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} *{animation:none !important; transition:none !important} }
+  .vh{position:absolute !important; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; margin:0; padding:0}
+  @media (prefers-reduced-motion:reduce){ *,*::before,*::after{animation:none !important; transition:none !important} }
 
-  /* ---------- en-tête ---------- */
-  .top{display:flex; align-items:center; justify-content:space-between; gap:16px; padding-block:18px}
-  .logo{display:block; width:124px; height:auto}
-  @media (min-width:1000px){ .logo{width:140px} }
+  /* ---------- toile de fond : le quartier ---------- */
+  .backdrop{position:absolute; inset:0 0 auto 0; height:620px; overflow:hidden; pointer-events:none; z-index:0;
+    -webkit-mask-image:linear-gradient(#000 0%, rgba(0,0,0,.55) 45%, transparent 100%);
+            mask-image:linear-gradient(#000 0%, rgba(0,0,0,.55) 45%, transparent 100%)}
+  .backdrop svg{width:100%; height:100%; display:block; opacity:.5}
+  .backdrop .blk{fill:#1D1D1B}
+  .backdrop .h{fill:#2C2B28}
+  .backdrop .h.go{animation:knock .8s ease-out forwards}
+  .backdrop .h.win{animation:win .8s ease-out forwards}
+  @keyframes knock{0%{fill:#2C2B28} 35%{fill:#FA1909} 100%{fill:#46443F}}
+  @keyframes win{0%{fill:#2C2B28} 35%{fill:#FF6A5E} 100%{fill:#B8170A}}
+
+  /* ---------- colonne unique ---------- */
+  .shell{position:relative; z-index:1; max-width:560px; margin:0 auto;
+    padding:0 max(16px, env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left))}
+  .top{display:flex; align-items:center; justify-content:space-between; padding-block:16px 6px}
+  .logo{display:block; width:112px; height:auto}
   .logo text{font-family:Montserrat,var(--text); font-weight:500}
-  .top-tel{font-size:14.5px; font-weight:500; color:var(--ink-2); text-decoration:none;
-    display:inline-flex; align-items:center; gap:8px; padding:8px 0}
-  .top-tel:hover{color:var(--ink)}
-  .top-tel svg{flex:0 0 auto}
+  .scarce{display:inline-flex; align-items:center; gap:8px; font-size:13.5px; font-weight:500; color:var(--ink-2);
+    background:rgba(26,26,24,.8); border:1px solid var(--line); border-radius:99px; padding:6px 12px 6px 10px}
+  .scarce i{width:8px; height:8px; border-radius:50%; background:var(--red); animation:blink 2s ease-out infinite}
+  @keyframes blink{0%{box-shadow:0 0 0 0 rgba(250,25,9,.55)} 70%,100%{box-shadow:0 0 0 7px rgba(250,25,9,0)}}
 
-  /* ---------- héros + formulaire ---------- */
-  .stage{display:grid; gap:28px; padding-bottom:56px}
-  @media (min-width:1000px){
-    .stage{grid-template-columns:minmax(0,1fr) 460px; gap:64px; align-items:start; padding-top:28px; padding-bottom:96px}
-    .formcard{position:sticky; top:24px}
+  /* ---------- accroche (écran 1 seulement) ---------- */
+  .intro{padding-top:18px; margin-bottom:18px}
+  .intro[hidden]{display:none}
+  h1{font-family:var(--display); font-weight:600; font-size:clamp(33px, 9.4vw, 48px); line-height:1.02;
+    letter-spacing:.003em; margin:0 0 12px; text-wrap:balance}
+  h1 mark{background:var(--red); color:#fff; padding:0 .12em; border-radius:3px; -webkit-box-decoration-break:clone; box-decoration-break:clone}
+  .intro p{margin:0; color:var(--ink-2); font-size:16.5px; line-height:1.5; max-width:44ch}
+  .trust{display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:14px; font-size:14px; color:var(--ink-2)}
+  .trust span{display:inline-flex; align-items:center; gap:6px}
+  .trust b{color:var(--ink)}
+  .trust .stars{color:var(--red); letter-spacing:1px}
+  @media (max-height:700px), (max-width:359px){
+    .intro{padding-top:8px; margin-bottom:14px}
+    .intro p{display:none}
+    h1{font-size:clamp(28px, 8.4vw, 40px); margin-bottom:8px}
+    .trust{margin-top:8px}
+    .top{padding-block:10px 2px}
+    .card .qsub{display:none}
   }
-  .hero{position:relative; padding-top:8px}
-  h1.lead{font-family:var(--display); font-weight:600; font-size:clamp(34px, 8.6vw, 68px);
-    line-height:1; letter-spacing:.002em; margin:0 0 18px; text-wrap:balance; max-width:13ch}
-  .hero .sub{font-size:clamp(16px, 2.1vw, 19px); color:var(--ink-2); margin:0; max-width:46ch; line-height:1.5}
-  .rating{display:flex; align-items:center; gap:10px; margin-top:18px; font-size:14.5px; color:var(--ink-2)}
-  .stars{color:var(--red); letter-spacing:1px; font-size:15px}
-  .rating b{color:var(--ink); font-weight:700}
 
-  .stats{display:grid; grid-template-columns:repeat(2,1fr); gap:1px; margin-top:34px;
-    background:var(--line); border:1px solid var(--line); border-radius:var(--r); overflow:hidden}
-  .stats > div{background:var(--bg); padding:18px 18px 16px}
-  .stats .n{font-family:var(--display); font-weight:600; font-size:30px; line-height:1; letter-spacing:.01em}
-  .stats .l{font-size:13.5px; color:var(--muted); margin-top:6px; line-height:1.35}
-  @media (min-width:640px){ .stats{grid-template-columns:repeat(4,1fr)} }
-  @media (max-width:999px){ .stats, .map{display:none} }
-
-  /* la carte du quartier */
-  .map{position:relative; margin-top:34px; border-radius:var(--r); overflow:hidden; aspect-ratio:16/8.4;
-    background:var(--bg-2); border:1px solid var(--line)}
-  .map svg{position:absolute; inset:0; width:100%; height:100%; display:block}
-  .map::after{content:""; position:absolute; inset:0; pointer-events:none;
-    background:radial-gradient(ellipse 70% 80% at 50% 50%, transparent 55%, var(--bg-2) 100%)}
-  .map .blk{fill:#201F1D}
-  .map .h{fill:#34322E}
-  .map .h.go{animation:knock .7s ease-out forwards}
-  .map .h.win{animation:win .7s ease-out forwards}
-  @keyframes knock{0%{fill:#34322E} 35%{fill:#FA1909} 100%{fill:#57544E}}
-  @keyframes win{0%{fill:#34322E} 35%{fill:#FF6A5E} 100%{fill:#FA1909}}
-  .map .pulse{fill:none; stroke:#FA1909; stroke-width:2; opacity:0; transform-origin:center; transform-box:fill-box;
-    animation:pulse 2.6s cubic-bezier(.2,.7,.3,1) .2s 1 forwards}
-  @keyframes pulse{0%{opacity:.8; transform:scale(.2)} 100%{opacity:0; transform:scale(9)}}
-  .map-key{position:absolute; left:16px; bottom:14px; z-index:1; display:flex; gap:16px; font-size:12.5px; color:var(--muted)}
-  .map-key span{display:inline-flex; align-items:center; gap:7px}
-  .map-key i{width:9px; height:9px; border-radius:2px; display:block}
-
-  /* ---------- la carte du formulaire ---------- */
-  .formcard{background:var(--bg-2); border:1px solid var(--line); border-radius:18px;
-    padding:22px 20px 24px; scroll-margin-top:12px; box-shadow:0 30px 80px -40px rgba(0,0,0,.8)}
-  @media (max-width:479px){ .formcard{margin-inline:-6px; padding:18px 16px 22px} }
-  @media (min-width:480px){ .formcard{padding:28px 28px 30px} }
-  .fc-head{display:flex; align-items:center; gap:12px; min-height:34px; margin-bottom:12px}
-  .backbtn{flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; background:none; border:1px solid var(--line-2);
-    border-radius:99px; color:var(--ink-2); font:inherit; font-size:14px; font-weight:500; padding:6px 14px 6px 10px;
-    cursor:pointer; transition:border-color .15s, color .15s}
+  /* ---------- carte du formulaire ---------- */
+  .card{background:var(--bg-2); border:1px solid var(--line); border-radius:18px; padding:18px 16px 20px;
+    box-shadow:0 30px 80px -40px rgba(0,0,0,.9); scroll-margin-top:10px}
+  @media (min-width:480px){ .card{padding:24px 26px 26px} }
+  .head{display:flex; align-items:center; gap:12px; min-height:36px; margin-bottom:10px}
+  .backbtn{flex:0 0 auto; display:inline-flex; align-items:center; gap:4px; background:none; border:1px solid var(--line-2);
+    border-radius:99px; color:var(--ink-2); font:inherit; font-size:14px; font-weight:500; min-height:36px; padding:0 14px 0 9px;
+    cursor:pointer; position:relative}
+  .backbtn::after{content:""; position:absolute; inset:-6px -4px}
   .backbtn:hover{border-color:var(--muted); color:var(--ink)}
   .backbtn[hidden]{display:none}
-  .steps{margin-left:0; font-size:13.5px; color:var(--muted); white-space:nowrap}
+  .steps{font-size:13.5px; color:var(--muted); white-space:nowrap}
   .backbtn:not([hidden]) + .steps{margin-left:auto}
-  .prog{height:4px; background:var(--line); border-radius:99px; overflow:hidden; margin-bottom:26px}
-  .prog span{display:block; height:100%; width:0; background:var(--red); border-radius:99px;
-    transition:width .4s cubic-bezier(.4,0,.2,1)}
+  .prog{height:4px; background:var(--line); border-radius:99px; overflow:hidden; margin-bottom:22px}
+  .prog span{display:block; height:100%; width:0; background:var(--red); border-radius:99px; transition:width .4s cubic-bezier(.4,0,.2,1)}
 
   .screen{display:none}
-  .screen.on{display:block; animation:slidein .28s cubic-bezier(.16,1,.3,1) both}
+  .screen.on{display:block; animation:slidein .26s cubic-bezier(.16,1,.3,1) both}
   @keyframes slidein{from{opacity:0; transform:translateX(12px)} to{opacity:1; transform:none}}
-  .q{font-family:var(--display); font-weight:600; font-size:clamp(24px, 6vw, 29px); line-height:1.12;
-    letter-spacing:.005em; margin:0 0 8px; text-wrap:balance}
+  .q{font-family:var(--display); font-weight:600; font-size:clamp(23px, 6.2vw, 28px); line-height:1.12;
+    letter-spacing:.004em; margin:0 0 6px; text-wrap:balance}
   .q:focus{outline:none}
-  .qsub{color:var(--ink-2); font-size:15.5px; margin:0 0 20px; line-height:1.5}
-  .q + .opts, .q + .fields{margin-top:20px}
+  .qsub{color:var(--ink-2); font-size:15.5px; margin:0 0 18px}
+  .q + .opts{margin-top:18px}
 
-  .opts{display:grid; gap:10px}
-  .opt{display:flex; align-items:center; gap:14px; width:100%; text-align:left; -webkit-appearance:none; appearance:none;
-    -webkit-user-select:none; user-select:none;
-    background:var(--card); border:1.5px solid var(--line); border-radius:var(--r); padding:14px 16px; min-height:58px;
-    font:inherit; font-size:16px; font-weight:500; color:var(--ink); cursor:pointer;
+  .opts{display:grid; gap:9px}
+  .opt{display:flex; align-items:center; gap:13px; width:100%; text-align:left; -webkit-appearance:none; appearance:none;
+    -webkit-user-select:none; user-select:none; background:var(--card); border:1.5px solid var(--line); border-radius:var(--r);
+    padding:13px 15px; min-height:56px; font:inherit; font-size:16px; font-weight:500; color:var(--ink); cursor:pointer;
     transition:border-color .14s, background .14s, transform .09s}
-  .opt:hover{background:var(--card-hi); border-color:var(--line-2)}
+  @media (hover:hover){ .opt:hover{background:var(--card-hi); border-color:var(--line-2)} }
   .opt:active{transform:scale(.985)}
   .opt[aria-pressed="true"]{border-color:var(--red); background:var(--red-soft); box-shadow:0 0 0 3px var(--red-glow)}
   .opt .mark{flex:0 0 22px; height:22px; border:1.5px solid var(--line-2); border-radius:50%; display:grid; place-items:center}
   .opt[aria-pressed="true"] .mark{border-color:var(--red); background:var(--red)}
-  .opt[aria-pressed="true"] .mark::after{content:""; width:8px; height:8px; border-radius:50%; background:#fff;
-    animation:pop .2s cubic-bezier(.2,1.4,.4,1) both}
+  .opt[aria-pressed="true"] .mark::after{content:""; width:8px; height:8px; border-radius:50%; background:#fff; animation:pop .2s cubic-bezier(.2,1.4,.4,1) both}
   @keyframes pop{from{transform:scale(0)} to{transform:scale(1)}}
   .opt .txt{flex:1; min-width:0}
-  .opt .hint{display:block; font-size:13.5px; font-weight:400; color:var(--muted); margin-top:2px}
+  .opt .hint{display:block; font-size:13.5px; font-weight:400; color:var(--muted); margin-top:1px}
 
   .field{margin-bottom:14px}
-  label{display:block; font-size:14.5px; font-weight:500; color:var(--ink-2); margin-bottom:7px}
-  input{width:100%; font:inherit; font-size:16px; padding:14px 15px; min-height:54px; border:1.5px solid var(--line);
+  label{display:block; font-size:14.5px; font-weight:500; color:var(--ink-2); margin-bottom:6px}
+  input{width:100%; font:inherit; font-size:16px; padding:13px 15px; min-height:54px; border:1.5px solid var(--line-2);
     border-radius:var(--r); background:var(--card); color:var(--ink); -webkit-appearance:none; appearance:none;
-    transition:border-color .14s, box-shadow .14s}
+    transition:border-color .14s, box-shadow .14s; scroll-margin-block:90px 140px}
   input:focus{outline:none; border-color:var(--red); box-shadow:0 0 0 3px var(--red-glow)}
-  input::placeholder{color:#6B675F}
+  input::placeholder{color:#6F6B63}
   input[aria-invalid="true"]{border-color:var(--red-2)}
-  .err{color:var(--red-2); font-size:14px; font-weight:500; margin:4px 0 0; min-height:22px}
+  .ferr{display:none; align-items:center; gap:6px; color:var(--red-2); font-size:14px; font-weight:500; margin:6px 0 0}
+  .ferr.on{display:flex}
+  .hp{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden}
 
-  .reassure{display:flex; gap:12px; background:var(--card); border:1px solid var(--line); border-radius:var(--r);
-    padding:14px 15px; margin-bottom:20px; font-size:14.5px; color:var(--ink-2); line-height:1.45}
-  .reassure svg{flex:0 0 auto; margin-top:1px}
-  .reassure b{color:var(--ink); font-weight:700}
-
-  .btn{display:flex; align-items:center; justify-content:center; width:100%; -webkit-appearance:none; appearance:none;
-    background:var(--red); color:#fff; border:none; border-radius:var(--r); padding:16px 20px; min-height:56px;
-    font-family:var(--text); font-weight:700; font-size:17px; cursor:pointer; transition:background .14s, transform .09s}
+  .btn{display:flex; align-items:center; justify-content:center; gap:10px; width:100%; -webkit-appearance:none; appearance:none;
+    background:var(--red); color:#fff; border:none; border-radius:var(--r); padding:13px 20px; min-height:60px;
+    font-family:var(--text); font-weight:700; font-size:19px; line-height:1.25; cursor:pointer; text-decoration:none; text-align:center;
+    box-shadow:0 10px 30px -12px rgba(250,25,9,.7); transition:background .14s, transform .09s}
   .btn:hover{background:#FF2B1C}
   .btn:active{transform:scale(.99)}
+  .btn[disabled]{opacity:.7; cursor:progress}
   .fine{font-size:13px; color:var(--muted); margin:12px 0 0; text-align:center; line-height:1.45}
+  .fine .left{color:var(--ink-2); font-weight:500}
 
-  /* fin */
-  .done-icon{width:52px; height:52px; border-radius:50%; display:grid; place-items:center; margin-bottom:16px}
+  .reassure{display:flex; gap:11px; background:var(--card); border:1px solid var(--line); border-radius:var(--r);
+    padding:12px 14px; margin-bottom:18px; font-size:14.5px; color:var(--ink-2); line-height:1.45}
+  .reassure svg{flex:0 0 auto; margin-top:2px}
+  .reassure b{color:var(--ink)}
+  .mini-review{margin:18px 0 0; padding:14px 0 0; border-top:1px solid var(--line); display:flex; gap:12px; font-size:14px; color:var(--ink-2)}
+  .mini-review blockquote{margin:0}
+  .mini-review cite{display:block; font-style:normal; color:var(--muted); margin-top:4px; font-size:13px}
+  .mini-review .stars{color:var(--red); letter-spacing:1px; font-size:13px; display:block; margin-bottom:3px}
+
+  .done-icon{width:50px; height:50px; border-radius:50%; display:grid; place-items:center; margin-bottom:14px}
   .done-icon.ok{background:rgba(63,211,126,.12); color:var(--ok)}
   .done-icon.hold{background:var(--red-soft); color:var(--red-2)}
-  .cal{margin:18px -8px 0; border-radius:var(--r); overflow:hidden; background:#fff; min-height:640px}
+  .cal{margin:16px -8px 0; border-radius:var(--r); overflow:hidden; background:#fff; min-height:640px}
   .cal iframe{display:block; width:100%; min-height:640px; border:0}
-  @media (min-width:480px){ .cal{margin-inline:-12px} }
-  .callme{display:block; text-align:center; margin-top:16px; font-size:14.5px; color:var(--ink-2)}
+  @media (min-width:480px){ .cal{margin-inline:-14px} }
+  .callme{display:block; text-align:center; margin:16px 0 0; font-size:14.5px; color:var(--ink-2)}
   .callme a{color:var(--ink); font-weight:700}
 
-  /* ---------- sections du bas ---------- */
-  section.band{border-top:1px solid var(--line); padding-block:64px}
-  @media (min-width:1000px){ section.band{padding-block:96px} }
-  h2.sec{font-family:var(--display); font-weight:600; font-size:clamp(28px, 5vw, 44px); line-height:1.06;
-    letter-spacing:.004em; margin:0 0 12px; max-width:18ch; text-wrap:balance}
-  .secsub{color:var(--ink-2); margin:0 0 36px; max-width:52ch; font-size:17px}
-
-  .process{list-style:none; margin:0; padding:0; display:grid; gap:14px; counter-reset:s}
-  @media (min-width:800px){ .process{grid-template-columns:repeat(3,1fr); gap:20px} }
-  .process li{counter-increment:s; border-top:2px solid var(--line-2); padding-top:18px}
-  .process li:first-child{border-top-color:var(--red)}
-  .process li::before{content:counter(s); font-family:var(--display); font-weight:500; font-size:15px; color:var(--muted)}
-  .process h3{font-family:var(--display); font-weight:600; font-size:22px; letter-spacing:.005em; margin:8px 0 6px}
-  .process .dur{font-size:14px; color:var(--red-2); font-weight:500; margin:0 0 8px}
-  .process p{margin:0; color:var(--ink-2); font-size:15.5px}
-
-  .reviews{display:grid; gap:16px}
-  @media (min-width:800px){ .reviews{grid-template-columns:1.35fr 1fr 1fr; gap:20px} }
-  .review{margin:0; background:var(--bg-2); border:1px solid var(--line); border-radius:16px; padding:24px;
-    display:flex; flex-direction:column; gap:18px}
-  .review blockquote{margin:0; font-size:17px; line-height:1.5; color:var(--ink)}
-  .review:first-child blockquote{font-family:var(--display); font-weight:500; font-size:clamp(20px, 2.3vw, 24px);
-    line-height:1.32; letter-spacing:.005em}
-  .review figcaption{display:flex; align-items:center; gap:12px; margin-top:auto}
-  .avatar{width:42px; height:42px; border-radius:50%; background:var(--card-hi); border:1px solid var(--line-2);
-    display:grid; place-items:center; font-weight:700; font-size:14px; color:var(--ink-2); flex:0 0 auto}
-  .who b{display:block; font-weight:700; font-size:15px}
-  .who span{font-size:13.5px; color:var(--muted)}
-  .review .stars{font-size:14px}
-
-  .faq-grid{display:grid; gap:32px}
-  @media (min-width:1000px){ .faq-grid{grid-template-columns:.8fr 1.2fr; gap:64px} }
+  /* ---------- preuve sous le formulaire (écran 1) ---------- */
+  .below[hidden]{display:none}
+  .below h2{font-family:var(--display); font-weight:600; font-size:24px; line-height:1.15; letter-spacing:.004em; margin:44px 0 14px}
+  .reviews{display:grid; gap:10px}
+  .review{margin:0; background:var(--bg-2); border:1px solid var(--line); border-radius:14px; padding:16px}
+  .review .stars{color:var(--red); letter-spacing:1px; font-size:13.5px}
+  .review blockquote{margin:6px 0 12px; font-size:15.5px; line-height:1.5; color:var(--ink)}
+  .review figcaption{display:flex; align-items:center; gap:10px}
+  .avatar{width:36px; height:36px; border-radius:50%; background:var(--card-hi); border:1px solid var(--line-2);
+    display:grid; place-items:center; font-weight:700; font-size:12.5px; color:var(--ink-2); flex:0 0 auto}
+  .who b{display:block; font-size:14.5px}
+  .who span{font-size:13px; color:var(--muted)}
   .faq details{border-bottom:1px solid var(--line)}
-  .faq details:first-child{border-top:1px solid var(--line)}
-  .faq summary{list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:16px;
-    padding:20px 0; font-weight:700; font-size:17px; line-height:1.35}
+  .faq details:first-of-type{border-top:1px solid var(--line)}
+  .faq summary{list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:14px;
+    padding:16px 0; min-height:56px; font-weight:700; font-size:16px; line-height:1.35}
   .faq summary::-webkit-details-marker{display:none}
-  .faq summary .pm{flex:0 0 26px; height:26px; border-radius:50%; border:1px solid var(--line-2); position:relative;
-    transition:transform .2s, border-color .2s}
-  .faq summary .pm::before, .faq summary .pm::after{content:""; position:absolute; left:50%; top:50%; width:10px; height:1.5px;
-    background:var(--ink-2); transform:translate(-50%,-50%)}
-  .faq summary .pm::after{transform:translate(-50%,-50%) rotate(90deg)}
+  .faq .pm{flex:0 0 24px; height:24px; border-radius:50%; border:1px solid var(--line-2); position:relative; transition:transform .2s, border-color .2s}
+  .faq .pm::before,.faq .pm::after{content:""; position:absolute; left:50%; top:50%; width:9px; height:1.5px; background:var(--ink-2); transform:translate(-50%,-50%)}
+  .faq .pm::after{transform:translate(-50%,-50%) rotate(90deg)}
   .faq details[open] .pm{transform:rotate(45deg); border-color:var(--red)}
-  .faq summary:hover .pm{border-color:var(--muted)}
-  .faq .ans{padding:0 44px 22px 0; color:var(--ink-2); font-size:16px}
+  .faq .ans{padding:0 36px 16px 0; color:var(--ink-2); font-size:15.5px}
   .faq .ans p{margin:0}
+  .again{margin-top:28px}
 
-  .cta-end{display:flex; flex-direction:column; align-items:flex-start; gap:18px}
-  .btn.inline{width:auto; padding-inline:28px; text-decoration:none}
-
-  footer{border-top:1px solid var(--line); padding-block:36px calc(36px + env(safe-area-inset-bottom));
-    color:var(--muted); font-size:14px}
-  footer .wrap{display:flex; flex-wrap:wrap; gap:14px 32px; align-items:center; justify-content:space-between}
-  footer nav{display:flex; flex-wrap:wrap; gap:8px 24px}
-  footer a{text-decoration:none} footer a:hover{color:var(--ink)}
+  footer{position:relative; z-index:1; text-align:center; color:var(--muted); font-size:13px;
+    padding:8px 16px calc(28px + env(safe-area-inset-bottom))}
+  footer a{text-decoration:none; display:inline-block; padding:8px 2px}
+  footer a:hover{color:var(--ink)}
 </style>
 </head>
 <body>
 
-<header class="wrap top">
-  <a href="#" aria-label="PromoLoco">
+<div class="backdrop" aria-hidden="true"><svg id="map" viewBox="0 0 640 620" preserveAspectRatio="xMidYMin slice"></svg></div>
+
+<div class="shell">
+  <header class="top">
     <svg class="logo" viewBox="60 40 920 360" role="img" aria-label="PromoLoco">
-      <defs>
-        <mask id="pin-hole">
-          <rect x="0" y="0" width="1100" height="500" fill="#fff"/>
-          <circle cx="858" cy="170" r="92" fill="#000"/>
-        </mask>
-      </defs>
+      <defs><mask id="pin-hole"><rect width="1100" height="500" fill="#fff"/><circle cx="858" cy="170" r="92" fill="#000"/></mask></defs>
       <text x="72" y="246" font-size="194" textLength="650" lengthAdjust="spacing" fill="#F6F4F0">PROM</text>
       <path d="M759,238 A118,118 0 1 1 957,238 L862,390 Z" fill="#FA1909" mask="url(#pin-hole)"/>
       <circle cx="855" cy="176" r="61" fill="none" stroke="#F6F4F0" stroke-width="21"/>
       <text x="244" y="366" font-size="144" textLength="478" lengthAdjust="spacing" fill="#F6F4F0">LOCO</text>
     </svg>
-  </a>
-  <a class="top-tel" href="tel:+14388824237">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
-    (438) 882-4237
-  </a>
-</header>
+    <span class="scarce"><i aria-hidden="true"></i>1 place par secteur</span>
+  </header>
 
-<main>
-<div class="wrap stage">
-
-  <div class="hero">
-    <h1 class="lead">Des clients du quartier, livrés à ton garage.</h1>
-    <p class="sub">Nos représentants cognent aux portes autour de ton commerce et te présentent en personne. Tu payes seulement pour les clients qui se présentent.</p>
-    <div class="rating"><span class="stars" aria-hidden="true">★★★★★</span><span><b>4,9/5</b> selon nos 50+ partenaires actifs</span></div>
-
-    <div class="stats">
-      <div><div class="n">50+</div><div class="l">garages partenaires au Québec</div></div>
-      <div><div class="n">340+</div><div class="l">représentants formés à l'interne</div></div>
-      <div><div class="n">94&nbsp;%</div><div class="l">des promos réclamées sous 21&nbsp;jours</div></div>
-      <div><div class="n">0&nbsp;$</div><div class="l">avant ton premier client livré</div></div>
+  <main>
+    <div class="intro" id="intro">
+      <h1>On prend un seul <mark id="mot">garage</mark> par secteur.</h1>
+      <p>Vérifie si le tien est encore libre. Nos représentants cognent aux portes autour de ton commerce, et tu payes seulement pour les clients qui se présentent.</p>
+      <div class="trust">
+        <span><span class="stars" aria-hidden="true">★★★★★</span><b>4,9/5</b>&nbsp;par 50+ partenaires</span>
+        <span><b>0&nbsp;$</b>&nbsp;avant ton premier client</span>
+      </div>
     </div>
 
-    <div class="map" aria-hidden="true">
-      <svg id="map" viewBox="0 0 640 336" preserveAspectRatio="xMidYMid slice"></svg>
-      <div class="map-key"><span><i style="background:#FA1909"></i>client livré</span><span><i style="background:#57544E"></i>porte cognée</span></div>
+    <div class="card" id="formulaire">
+      <div class="head">
+        <button type="button" class="backbtn" id="back" hidden>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Retour
+        </button>
+        <span class="steps" id="steps" aria-live="polite">Question 1 sur 6</span>
+      </div>
+      <div class="prog" aria-hidden="true"><span id="bar"></span></div>
+
+      <form id="form" method="post" action="#" novalidate>
+
+      <section class="screen on" data-key="niche" data-type="choice" aria-labelledby="q-niche">
+        <h2 class="q" id="q-niche" tabindex="-1">T'es dans quel domaine&nbsp;?</h2>
+        <p class="qsub" id="niche-sub">6 questions rapides, moins de 2 minutes.</p>
+        <div class="opts" role="group" aria-labelledby="q-niche">
+          <button type="button" class="opt" data-v="mecanique"><span class="mark"></span><span class="txt">Mécanique générale / entretien</span></button>
+          <button type="button" class="opt" data-v="esthetique"><span class="mark"></span><span class="txt">Esthétique automobile / detailing</span></button>
+          <button type="button" class="opt" data-v="lavage"><span class="mark"></span><span class="txt">Lave-auto<span class="hint">Tunnel ou portique</span></span></button>
+          <button type="button" class="opt" data-v="concession"><span class="mark"></span><span class="txt">Concession automobile</span></button>
+          <button type="button" class="opt" data-v="carrosserie"><span class="mark"></span><span class="txt">Carrosserie</span></button>
+          <button type="button" class="opt" data-v="pneus"><span class="mark"></span><span class="txt">Pneus</span></button>
+          <button type="button" class="opt" data-v="autre"><span class="mark"></span><span class="txt">Autre</span></button>
+        </div>
+      </section>
+
+      <section class="screen" data-key="contact" data-type="fields" aria-labelledby="q-contact">
+        <h2 class="q" id="q-contact" tabindex="-1">Qui on appelle pour réserver ton secteur&nbsp;?</h2>
+        <p class="qsub">On te garde la place le temps de valider ton territoire.</p>
+        <div class="reassure">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FA1909" stroke-width="2.2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+          <span><b>Aucun frais fixe, aucun abonnement.</b> Tu payes rien tant qu'un client s'est pas présenté chez vous.</span>
+        </div>
+        <div class="field">
+          <label for="f-nom">Prénom et nom</label>
+          <input id="f-nom" name="nom" type="text" autocomplete="name" autocapitalize="words" enterkeyhint="next" required minlength="2" aria-describedby="e-nom" placeholder="Martin Tremblay">
+          <p class="ferr" id="e-nom" aria-live="polite"></p>
+        </div>
+        <div class="field">
+          <label for="f-tel">Téléphone</label>
+          <input id="f-tel" name="tel" type="tel" autocomplete="tel-national" inputmode="tel" enterkeyhint="next" required aria-describedby="e-tel" placeholder="514 555-0123">
+          <p class="ferr" id="e-tel" aria-live="polite"></p>
+        </div>
+        <div class="field">
+          <label for="f-email">Courriel</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" enterkeyhint="go" required aria-describedby="e-email" placeholder="martin@garagetremblay.ca">
+          <p class="ferr" id="e-email" aria-live="polite"></p>
+        </div>
+        <div class="hp" aria-hidden="true"><label for="f-site">Site web</label><input id="f-site" name="site_web" type="text" tabindex="-1" autocomplete="off"></div>
+        <button type="submit" class="btn" id="go-contact">Continuer</button>
+        <p class="fine"><b class="left" id="left-hint">Plus que 4 questions.</b> Aucun engagement, aucune carte requise. En continuant, tu acceptes qu'on te contacte au sujet de PromoLoco.</p>
+        <figure class="mini-review">
+          <span class="avatar" aria-hidden="true">HS</span>
+          <div><span class="stars" aria-label="5 étoiles sur 5">★★★★★</span>
+            <blockquote>« À date, c'est notre meilleure année au niveau des services offerts. »</blockquote>
+            <cite>Honda Saint-Jean, Saint-Jean-sur-Richelieu</cite></div>
+        </figure>
+      </section>
+
+      <section class="screen" data-key="capacite" data-type="choice" aria-labelledby="q-cap">
+        <h2 class="q" id="q-cap" tabindex="-1">Combien de nouveaux clients de plus tu peux prendre par mois&nbsp;?</h2>
+        <p class="qsub">Sans engager personne. On veut t'envoyer un volume que tu peux servir.</p>
+        <div class="opts" role="group" aria-labelledby="q-cap">
+          <button type="button" class="opt" data-v="50plus"><span class="mark"></span><span class="txt">Plus de 50</span></button>
+          <button type="button" class="opt" data-v="20a50"><span class="mark"></span><span class="txt">Entre 20 et 50</span></button>
+          <button type="button" class="opt" data-v="10a20"><span class="mark"></span><span class="txt">Entre 10 et 20</span></button>
+          <button type="button" class="opt" data-v="moins10"><span class="mark"></span><span class="txt">Moins de 10</span></button>
+        </div>
+      </section>
+
+      <section class="screen" data-key="lieu" data-type="choice" aria-labelledby="q-lieu">
+        <h2 class="q" id="q-lieu" tabindex="-1">Où tes clients laissent leur véhicule&nbsp;?</h2>
+        <div class="opts" role="group" aria-labelledby="q-lieu">
+          <button type="button" class="opt" data-v="local"><span class="mark"></span><span class="txt">À mon local commercial</span></button>
+          <button type="button" class="opt" data-v="deux"><span class="mark"></span><span class="txt">Les deux<span class="hint">J'ai un local et je me déplace aussi</span></span></button>
+          <button type="button" class="opt" data-v="mobile"><span class="mark"></span><span class="txt">Je me déplace chez le client<span class="hint">Service mobile</span></span></button>
+        </div>
+      </section>
+
+      <section class="screen" data-key="autorite" data-type="choice" aria-labelledby="q-aut">
+        <h2 class="q" id="q-aut" tabindex="-1">Qui décide des promotions chez vous&nbsp;?</h2>
+        <div class="opts" role="group" aria-labelledby="q-aut">
+          <button type="button" class="opt" data-v="moi"><span class="mark"></span><span class="txt">Moi</span></button>
+          <button type="button" class="opt" data-v="associe"><span class="mark"></span><span class="txt">Moi, avec un associé</span></button>
+          <button type="button" class="opt" data-v="siege"><span class="mark"></span><span class="txt">Le siège social ou la bannière</span></button>
+          <button type="button" class="opt" data-v="demander"><span class="mark"></span><span class="txt">Je dois demander au propriétaire</span></button>
+        </div>
+      </section>
+
+      <section class="screen" data-key="anciennete" data-type="choice" aria-labelledby="q-anc">
+        <h2 class="q" id="q-anc" tabindex="-1">Depuis quand t'es ouvert&nbsp;?</h2>
+        <div class="opts" role="group" aria-labelledby="q-anc">
+          <button type="button" class="opt" data-v="10plus"><span class="mark"></span><span class="txt">Plus de 10 ans</span></button>
+          <button type="button" class="opt" data-v="6a10"><span class="mark"></span><span class="txt">6 à 10 ans</span></button>
+          <button type="button" class="opt" data-v="3a5"><span class="mark"></span><span class="txt">3 à 5 ans</span></button>
+          <button type="button" class="opt" data-v="1a2"><span class="mark"></span><span class="txt">1 à 2 ans</span></button>
+          <button type="button" class="opt" data-v="moins1"><span class="mark"></span><span class="txt">Moins d'un an</span></button>
+        </div>
+      </section>
+
+      <section class="screen" data-key="service" data-type="choice" data-only="concession" aria-labelledby="q-serv">
+        <h2 class="q" id="q-serv" tabindex="-1">Avez-vous un département de service&nbsp;?</h2>
+        <p class="qsub">Mécanique ou esthétique : c'est là qu'un client du quartier revient le plus souvent.</p>
+        <div class="opts" role="group" aria-labelledby="q-serv">
+          <button type="button" class="opt" data-v="public"><span class="mark"></span><span class="txt">Oui, ouvert au public</span></button>
+          <button type="button" class="opt" data-v="interne"><span class="mark"></span><span class="txt">Oui, mais réservé à notre clientèle<span class="hint">Seulement nos propres acheteurs</span></span></button>
+          <button type="button" class="opt" data-v="aucun"><span class="mark"></span><span class="txt">Non, vente de véhicules seulement</span></button>
+        </div>
+      </section>
+
+      <section class="screen" data-key="marques" data-type="choice" data-only="concession" data-requires="service=public" aria-labelledby="q-marq">
+        <h2 class="q" id="q-marq" tabindex="-1">Acceptez-vous les véhicules d'autres marques que la vôtre&nbsp;?</h2>
+        <div class="opts" role="group" aria-labelledby="q-marq">
+          <button type="button" class="opt" data-v="toutes"><span class="mark"></span><span class="txt">Oui, toutes les marques</span></button>
+          <button type="button" class="opt" data-v="surtout"><span class="mark"></span><span class="txt">Oui, mais surtout la nôtre</span></button>
+          <button type="button" class="opt" data-v="notre"><span class="mark"></span><span class="txt">Non, notre marque uniquement</span></button>
+        </div>
+      </section>
+
+      <section class="screen" data-key="groupe" data-type="choice" data-only="concession" aria-labelledby="q-grp">
+        <h2 class="q" id="q-grp" tabindex="-1">Combien de concessions détenez-vous&nbsp;?</h2>
+        <div class="opts" role="group" aria-labelledby="q-grp">
+          <button type="button" class="opt" data-v="1"><span class="mark"></span><span class="txt">Une seule</span></button>
+          <button type="button" class="opt" data-v="2a3"><span class="mark"></span><span class="txt">2 à 3</span></button>
+          <button type="button" class="opt" data-v="4plus"><span class="mark"></span><span class="txt">4 et plus</span></button>
+        </div>
+      </section>
+
+      <section class="screen" data-key="fin">
+        <div id="fin-go" hidden>
+          <div class="done-icon ok"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+          <h2 class="q" tabindex="-1">Bonne nouvelle : ton profil est admissible.</h2>
+          <p class="qsub">Dernière étape : choisis un moment pour ton appel de 20 minutes. On valide ton secteur ensemble, sans pression.</p>
+          <div class="cal" id="cal"></div>
+        </div>
+        <div id="fin-hold" hidden>
+          <div class="done-icon hold"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></div>
+          <h2 class="q" tabindex="-1">Merci, c'est bien reçu.</h2>
+          <p class="qsub">Un membre de l'équipe va t'appeler pour regarder ce qu'on peut faire dans ton cas.</p>
+        </div>
+        <p class="callme">Une question&nbsp;? Appelle-nous au <a href="tel:+14388824237">(438) 882-4237</a></p>
+      </section>
+
+      </form>
+      <noscript><p class="qsub">Ce formulaire a besoin de JavaScript. Appelle-nous au <a href="tel:+14388824237">(438) 882-4237</a>.</p></noscript>
     </div>
-  </div>
 
-  <div class="formcard" id="formulaire">
-    <div class="fc-head">
-      <button type="button" class="backbtn" id="back" hidden>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-        Retour
-      </button>
-      <span class="steps" id="steps" aria-live="polite">Question 1 sur 6</span>
+    <div class="below" id="below">
+      <h2>Ce que nos partenaires en disent</h2>
+      <div class="reviews">
+        <figure class="review">
+          <span class="stars" aria-label="5 étoiles sur 5">★★★★★</span>
+          <blockquote>Au départ, j'étais sceptique. Aller chercher 1&nbsp;500 clients pour notre atelier, ça me paraissait gros. Promoloco m'a prouvé le contraire, et à date, c'est notre meilleure année au niveau des services offerts.</blockquote>
+          <figcaption><span class="avatar" aria-hidden="true">HS</span><span class="who"><b>Honda Saint-Jean</b><span>Concessionnaire, Saint-Jean-sur-Richelieu</span></span></figcaption>
+        </figure>
+        <figure class="review">
+          <span class="stars" aria-label="5 étoiles sur 5">★★★★★</span>
+          <blockquote>On a travaillé avec Promoloco sur plusieurs contrats et l'expérience a été excellente à chaque fois. Ils nous ont aidés à élargir notre clientèle dans l'ensemble de nos garages et concessions.</blockquote>
+          <figcaption><span class="avatar" aria-hidden="true">GP</span><span class="who"><b>Groupe Paquet</b><span>Concessionnaire, Lévis</span></span></figcaption>
+        </figure>
+        <figure class="review">
+          <span class="stars" aria-label="5 étoiles sur 5">★★★★★</span>
+          <blockquote>Promoloco nous a vraiment aidés à développer notre clientèle locale du coin.</blockquote>
+          <figcaption><span class="avatar" aria-hidden="true">SW</span><span class="who"><b>SW Performance</b><span>Garage, Longueuil</span></span></figcaption>
+        </figure>
+      </div>
+
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        <details name="faq">
+          <summary>Comment vous êtes payés&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
+          <div class="ans"><p>Uniquement à la performance. Tu payes pour chaque client livré à ton atelier : aucun abonnement, aucun forfait minimum, aucun frais caché.</p></div>
+        </details>
+        <details name="faq">
+          <summary>Et si un client ne se présente pas&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
+          <div class="ans"><p>Tu payes seulement pour les clients qui se présentent réellement chez vous. Les promotions non réclamées ne te coûtent rien. En pratique, 94&nbsp;% des clients se présentent dans les 21&nbsp;jours suivant l'activation.</p></div>
+        </details>
+        <details name="faq">
+          <summary>Combien de clients vais-je recevoir par mois&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
+          <div class="ans"><p>En moyenne entre 20 et 50 nouveaux clients par mois, jusqu'à 1&nbsp;500 par année pour nos partenaires à fort volume. Ça dépend de ton territoire, de ta capacité d'accueil et de la saison. On fixe ensemble une cadence réaliste pendant l'appel.</p></div>
+        </details>
+        <details name="faq">
+          <summary>Pourquoi un seul garage par secteur&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
+          <div class="ans"><p>Nos représentants présentent un seul commerce aux gens du quartier. Si on présentait deux garages voisins, on travaillerait contre toi. Le formulaire sert à vérifier si ton secteur est encore libre.</p></div>
+        </details>
+        <details name="faq">
+          <summary>Comment je sais si c'est rentable&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
+          <div class="ans"><p>Chaque partenaire a accès à un tableau de bord en temps réel : clients livrés, services activés, revenu généré, retour sur investissement. Tu sais exactement quand augmenter le volume.</p></div>
+        </details>
+      </div>
+
+      <a class="btn again" href="#formulaire" id="to-form">Vérifier si mon secteur est libre</a>
     </div>
-    <div class="prog" aria-hidden="true"><span id="bar"></span></div>
-
-    <form id="form" novalidate>
-
-    <section class="screen on" data-key="niche" data-type="choice">
-      <h2 class="q" tabindex="-1">T'es dans quel domaine&nbsp;?</h2>
-      <p class="qsub">Vérifie si ton secteur est disponible. Moins de 2 minutes.</p>
-      <div class="opts">
-        <button type="button" class="opt" data-v="mecanique"><span class="mark"></span><span class="txt">Mécanique générale / entretien</span></button>
-        <button type="button" class="opt" data-v="esthetique"><span class="mark"></span><span class="txt">Esthétique automobile / detailing</span></button>
-        <button type="button" class="opt" data-v="lavage"><span class="mark"></span><span class="txt">Lave-auto<span class="hint">Tunnel ou portique</span></span></button>
-        <button type="button" class="opt" data-v="concession"><span class="mark"></span><span class="txt">Concession automobile</span></button>
-        <button type="button" class="opt" data-v="carrosserie"><span class="mark"></span><span class="txt">Carrosserie</span></button>
-        <button type="button" class="opt" data-v="pneus"><span class="mark"></span><span class="txt">Pneus</span></button>
-        <button type="button" class="opt" data-v="autre"><span class="mark"></span><span class="txt">Autre</span></button>
-      </div>
-    </section>
-
-    <section class="screen" data-key="contact" data-type="fields">
-      <h2 class="q" tabindex="-1">On parle à qui&nbsp;?</h2>
-      <p class="qsub">Pour te réserver ton appel de 20 minutes avec un partenaire PromoLoco.</p>
-      <div class="reassure">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FA1909" stroke-width="2.2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-        <span><b>Tu payes rien tant qu'un client s'est pas présenté chez vous.</b> Aucun frais fixe, aucun abonnement.</span>
-      </div>
-      <div class="field">
-        <label for="f-nom">Prénom et nom</label>
-        <input id="f-nom" name="nom" type="text" autocomplete="name" autocapitalize="words" enterkeyhint="next" placeholder="Martin Tremblay">
-      </div>
-      <div class="field">
-        <label for="f-tel">Téléphone</label>
-        <input id="f-tel" name="tel" type="tel" autocomplete="tel-national" inputmode="tel" enterkeyhint="next" maxlength="12" placeholder="514 555-0123">
-      </div>
-      <div class="field">
-        <label for="f-email">Courriel</label>
-        <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" enterkeyhint="go" placeholder="martin@garagetremblay.ca">
-      </div>
-      <p class="err" id="err-contact" role="alert"></p>
-      <button type="submit" class="btn" id="go-contact">Continuer</button>
-      <p class="fine">Aucun engagement, aucune carte requise. En continuant, tu acceptes qu'on te contacte au sujet de PromoLoco.</p>
-    </section>
-
-    <section class="screen" data-key="capacite" data-type="choice">
-      <h2 class="q" tabindex="-1">Combien de nouveaux clients de plus tu peux prendre par mois&nbsp;?</h2>
-      <p class="qsub">Sans engager personne de plus. On veut que le volume qu'on t'envoie te mette pas dans le trouble.</p>
-      <div class="opts">
-        <button type="button" class="opt" data-v="50plus"><span class="mark"></span><span class="txt">Plus de 50</span></button>
-        <button type="button" class="opt" data-v="20a50"><span class="mark"></span><span class="txt">Entre 20 et 50</span></button>
-        <button type="button" class="opt" data-v="10a20"><span class="mark"></span><span class="txt">Entre 10 et 20</span></button>
-        <button type="button" class="opt" data-v="moins10"><span class="mark"></span><span class="txt">Moins de 10</span></button>
-      </div>
-    </section>
-
-    <section class="screen" data-key="lieu" data-type="choice">
-      <h2 class="q" tabindex="-1">Où tes clients laissent leur véhicule&nbsp;?</h2>
-      <div class="opts">
-        <button type="button" class="opt" data-v="local"><span class="mark"></span><span class="txt">À mon local commercial</span></button>
-        <button type="button" class="opt" data-v="deux"><span class="mark"></span><span class="txt">Les deux<span class="hint">J'ai un local et je me déplace aussi</span></span></button>
-        <button type="button" class="opt" data-v="mobile"><span class="mark"></span><span class="txt">Je me déplace chez le client<span class="hint">Service mobile</span></span></button>
-      </div>
-    </section>
-
-    <section class="screen" data-key="autorite" data-type="choice">
-      <h2 class="q" tabindex="-1">Qui décide des promotions chez vous&nbsp;?</h2>
-      <div class="opts">
-        <button type="button" class="opt" data-v="moi"><span class="mark"></span><span class="txt">Moi</span></button>
-        <button type="button" class="opt" data-v="associe"><span class="mark"></span><span class="txt">Moi, avec un associé</span></button>
-        <button type="button" class="opt" data-v="siege"><span class="mark"></span><span class="txt">Le siège social ou la bannière</span></button>
-        <button type="button" class="opt" data-v="demander"><span class="mark"></span><span class="txt">Je dois demander au propriétaire</span></button>
-      </div>
-    </section>
-
-    <section class="screen" data-key="anciennete" data-type="choice">
-      <h2 class="q" tabindex="-1">Depuis quand t'es ouvert&nbsp;?</h2>
-      <div class="opts">
-        <button type="button" class="opt" data-v="10plus"><span class="mark"></span><span class="txt">Plus de 10 ans</span></button>
-        <button type="button" class="opt" data-v="6a10"><span class="mark"></span><span class="txt">6 à 10 ans</span></button>
-        <button type="button" class="opt" data-v="3a5"><span class="mark"></span><span class="txt">3 à 5 ans</span></button>
-        <button type="button" class="opt" data-v="1a2"><span class="mark"></span><span class="txt">1 à 2 ans</span></button>
-        <button type="button" class="opt" data-v="moins1"><span class="mark"></span><span class="txt">Moins d'un an</span></button>
-      </div>
-    </section>
-
-    <section class="screen" data-key="service" data-type="choice" data-only="concession">
-      <h2 class="q" tabindex="-1">Avez-vous un département de service&nbsp;?</h2>
-      <p class="qsub">Mécanique ou esthétique : c'est là qu'un client du quartier revient le plus souvent.</p>
-      <div class="opts">
-        <button type="button" class="opt" data-v="public"><span class="mark"></span><span class="txt">Oui, ouvert au public</span></button>
-        <button type="button" class="opt" data-v="interne"><span class="mark"></span><span class="txt">Oui, mais réservé à notre clientèle<span class="hint">Seulement nos propres acheteurs</span></span></button>
-        <button type="button" class="opt" data-v="aucun"><span class="mark"></span><span class="txt">Non, vente de véhicules seulement</span></button>
-      </div>
-    </section>
-
-    <section class="screen" data-key="marques" data-type="choice" data-only="concession" data-requires="service=public">
-      <h2 class="q" tabindex="-1">Acceptez-vous les véhicules d'autres marques que la vôtre&nbsp;?</h2>
-      <div class="opts">
-        <button type="button" class="opt" data-v="toutes"><span class="mark"></span><span class="txt">Oui, toutes les marques</span></button>
-        <button type="button" class="opt" data-v="surtout"><span class="mark"></span><span class="txt">Oui, mais surtout la nôtre</span></button>
-        <button type="button" class="opt" data-v="notre"><span class="mark"></span><span class="txt">Non, notre marque uniquement</span></button>
-      </div>
-    </section>
-
-    <section class="screen" data-key="groupe" data-type="choice" data-only="concession">
-      <h2 class="q" tabindex="-1">Combien de concessions détenez-vous&nbsp;?</h2>
-      <div class="opts">
-        <button type="button" class="opt" data-v="1"><span class="mark"></span><span class="txt">Une seule</span></button>
-        <button type="button" class="opt" data-v="2a3"><span class="mark"></span><span class="txt">2 à 3</span></button>
-        <button type="button" class="opt" data-v="4plus"><span class="mark"></span><span class="txt">4 et plus</span></button>
-      </div>
-    </section>
-
-    <section class="screen" data-key="fin">
-      <div id="fin-go" hidden>
-        <div class="done-icon ok"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
-        <h2 class="q" tabindex="-1">Ton secteur a l'air disponible.</h2>
-        <p class="qsub">Choisis un moment pour ton appel de 20 minutes. On valide ton territoire ensemble, sans pression.</p>
-        <div class="cal" id="cal"></div>
-      </div>
-      <div id="fin-hold" hidden>
-        <div class="done-icon hold"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></div>
-        <h2 class="q" tabindex="-1">Merci, c'est bien reçu.</h2>
-        <p class="qsub">Un membre de l'équipe va t'appeler pour regarder ce qu'on peut faire dans ton cas.</p>
-      </div>
-      <p class="callme">Une question avant&nbsp;? <a href="tel:+14388824237">(438) 882-4237</a></p>
-    </section>
-
-    </form>
-  </div>
+  </main>
 </div>
 
-<section class="band" aria-labelledby="t-process">
-  <div class="wrap">
-    <h2 class="sec" id="t-process">Trois étapes. Aucune pression.</h2>
-    <p class="secsub">De ton premier clic à tes premiers clients, sans friction.</p>
-    <ol class="process">
-      <li><h3>Remplis le formulaire</h3><p class="dur">2 minutes</p><p>Quelques questions sur ton atelier et ta capacité. On vérifie la disponibilité de ton territoire.</p></li>
-      <li><h3>Appel de découverte</h3><p class="dur">20 minutes</p><p>Un partenaire PromoLoco, pas un vendeur. On regarde ensemble si ça tient debout.</p></li>
-      <li><h3>Lancement de ta campagne</h3><p class="dur">Tu suis tout en direct</p><p>On configure ton territoire, on briefe l'équipe terrain, et tes premiers clients commencent à se présenter.</p></li>
-    </ol>
-  </div>
-</section>
-
-<section class="band" aria-labelledby="t-avis">
-  <div class="wrap">
-    <h2 class="sec" id="t-avis">Ce que nos partenaires en disent.</h2>
-    <p class="secsub">Des garages et des concessions du Québec qui reçoivent déjà leurs clients par PromoLoco.</p>
-    <div class="reviews">
-      <figure class="review">
-        <span class="stars" aria-label="5 étoiles sur 5">★★★★★</span>
-        <blockquote>Au départ, j'étais sceptique. Aller chercher 1&nbsp;500 clients pour notre atelier, ça me paraissait gros. Promoloco m'a prouvé le contraire, et à date, c'est notre meilleure année au niveau des services offerts.</blockquote>
-        <figcaption><span class="avatar" aria-hidden="true">HS</span><span class="who"><b>Honda Saint-Jean</b><span>Concessionnaire, Saint-Jean-sur-Richelieu</span></span></figcaption>
-      </figure>
-      <figure class="review">
-        <span class="stars" aria-label="5 étoiles sur 5">★★★★★</span>
-        <blockquote>On a travaillé avec Promoloco sur plusieurs contrats et l'expérience a été excellente à chaque fois. Ils nous ont aidés à élargir notre clientèle dans l'ensemble de nos garages et concessions.</blockquote>
-        <figcaption><span class="avatar" aria-hidden="true">GP</span><span class="who"><b>Groupe Paquet</b><span>Concessionnaire, Lévis</span></span></figcaption>
-      </figure>
-      <figure class="review">
-        <span class="stars" aria-label="5 étoiles sur 5">★★★★★</span>
-        <blockquote>Promoloco nous a vraiment aidés à développer notre clientèle locale du coin.</blockquote>
-        <figcaption><span class="avatar" aria-hidden="true">SW</span><span class="who"><b>SW Performance</b><span>Garage, Longueuil</span></span></figcaption>
-      </figure>
-    </div>
-  </div>
-</section>
-
-<section class="band" aria-labelledby="t-faq">
-  <div class="wrap faq-grid">
-    <div>
-      <h2 class="sec" id="t-faq">Les vraies questions avant de réserver.</h2>
-      <p class="secsub">Celles qu'on nous pose le plus souvent. Une autre question&nbsp;? Appelle-nous au <a href="tel:+14388824237">(438) 882-4237</a>.</p>
-    </div>
-    <div class="faq">
-      <details name="faq">
-        <summary>Comment fonctionne votre modèle de rémunération&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
-        <div class="ans"><p>Uniquement à la performance. Tu payes pour chaque client livré à ton atelier : aucun abonnement, aucun forfait minimum, aucun frais caché.</p></div>
-      </details>
-      <details name="faq">
-        <summary>Et si un client ne se présente pas à mon garage&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
-        <div class="ans"><p>Tu payes uniquement pour les clients qui se présentent réellement chez vous. Les promotions non réclamées ne te coûtent rien. En pratique, 94&nbsp;% des clients se présentent dans les 21&nbsp;jours suivant l'activation.</p></div>
-      </details>
-      <details name="faq">
-        <summary>Combien de clients vais-je recevoir par mois&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
-        <div class="ans"><p>En moyenne entre 20 et 50 nouveaux clients par mois, jusqu'à 1&nbsp;500 par année pour nos partenaires à fort volume. Le chiffre exact dépend de ton territoire, de ta capacité d'accueil et de la saison. On définit ensemble une cadence réaliste pendant l'appel.</p></div>
-      </details>
-      <details name="faq">
-        <summary>Comment savoir si la promotion est rentable pour mon garage&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
-        <div class="ans"><p>Chaque partenaire a accès à notre plateforme : un tableau de bord en temps réel qui suit chaque dollar lié à ta promotion. Clients livrés, services activés, revenu généré, retour sur investissement. Tu sais exactement quand augmenter le volume.</p></div>
-      </details>
-      <details name="faq">
-        <summary>Qu'est-ce qui arrive après le formulaire&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
-        <div class="ans"><p>Si ton secteur est disponible, tu choisis directement un moment pour l'appel de 20 minutes. Sinon, un membre de l'équipe te rappelle pour voir ce qu'on peut faire dans ton cas. Aucun engagement dans les deux cas.</p></div>
-      </details>
-    </div>
-  </div>
-</section>
-
-<section class="band" aria-labelledby="t-end">
-  <div class="wrap cta-end">
-    <h2 class="sec" id="t-end">Ton secteur est peut-être encore libre.</h2>
-    <p class="secsub" style="margin-bottom:6px">Si ton atelier peut accueillir 20 à 50 nouveaux clients par mois, on a probablement quelque chose pour toi.</p>
-    <a class="btn inline" href="#formulaire" id="to-form">Vérifier mon secteur</a>
-  </div>
-</section>
-</main>
-
-<footer>
-  <div class="wrap">
-    <span>© 2026 PromoLoco. Basé à Saint-Jean-sur-Richelieu, Québec.</span>
-    <nav aria-label="Contact">
-      <a href="mailto:info@promoloco.ca">info@promoloco.ca</a>
-      <a href="tel:+14388824237">(438) 882-4237</a>
-    </nav>
-  </div>
-</footer>
+<footer>© 2026 PromoLoco · <a href="mailto:info@promoloco.ca">info@promoloco.ca</a> · <a href="tel:+14388824237">(438) 882-4237</a></footer>
 
 <script>
 /* ============================================================
@@ -501,14 +429,12 @@
 const CONFIG = {
   // URL du webhook entrant GHL (ou de ton serveur). Vide = rien n'est envoyé.
   webhook: '',
-  // ID du pixel Meta. Vide = aucun pixel chargé (ex. pour les tests).
+  // ID du pixel Meta. Vide = aucun pixel chargé (ex. pendant les tests).
   pixelId: '',
   // Calendriers GHL par niche ; les niches absentes prennent « defaut ».
-  calendriers: {
-    defaut:     'xbtFcS6Os4ebiQWkWvcc',
-    lavage:     'y0RvpgktjxatzaAerrkX',
-    concession: 'bFYAzyGJOaRAcae6dbMV'
-  },
+  calendriers: { defaut:'xbtFcS6Os4ebiQWkWvcc', lavage:'y0RvpgktjxatzaAerrkX', concession:'bFYAzyGJOaRAcae6dbMV' },
+  // ?n=concession dans l'URL de la pub : change le mot surligné du titre (correspondance pub → page)
+  mots: { garage:'garage', mecanique:'garage', concession:'concessionnaire', lavage:'lave-auto', esthetique:'atelier', carrosserie:'carrossier', pneus:'centre de pneus' },
   seuil: 6,
   plafondVerrou: 3,
   poids: {
@@ -527,7 +453,7 @@ const CONFIG = {
 };
 
 /* ============================================================
-   ENVOIS — pixel Meta + webhook
+   ENVOIS — pixel Meta, webhook, dataLayer
    ============================================================ */
 if (CONFIG.pixelId) {
   !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -535,37 +461,45 @@ if (CONFIG.pixelId) {
   t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
   fbq('init', CONFIG.pixelId); fbq('track', 'PageView');
 }
+window.dataLayer = window.dataLayer || [];
 
+const params = new URLSearchParams(location.search);
 function captureAttribution(){
-  const p = new URLSearchParams(location.search);
-  const fbclid = p.get('fbclid');
-  if (fbclid) { try { document.cookie = `_fbc=fb.1.${Date.now()}.${fbclid}; path=/; max-age=7776000`; } catch(e){} }
+  const fbclid = params.get('fbclid');
+  if (fbclid) { try { document.cookie = `_fbc=fb.1.${Date.now()}.${fbclid}; path=/; max-age=7776000; SameSite=Lax`; } catch(e){} }
   const read = n => { try { return (document.cookie.match('(^|;)\\s*'+n+'=([^;]*)')||[])[2] || ''; } catch(e){ return ''; } };
-  return { fbp: read('_fbp'), fbc: read('_fbc'), utm: Object.fromEntries(p),
+  return { fbp: read('_fbp'), fbc: read('_fbc'), utm: Object.fromEntries(params),
            event_id: (window.crypto && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2)) };
 }
 const ATTR = captureAttribution();
 
+const R = {};
 function post(etape, d){
-  if (!CONFIG.webhook) return;
+  if (!CONFIG.webhook || R.bot) return;
   try {
     fetch(CONFIG.webhook, { method:'POST', keepalive:true, headers:{ 'Content-Type':'application/json' },
       body: JSON.stringify({ etape, ...d, ...ATTR, page: location.href }) }).catch(() => {});
   } catch(e){}
 }
 function track(ev, d, custom){
-  if (typeof window.fbq !== 'function') return;
+  if (R.bot || typeof window.fbq !== 'function') return;
   try { fbq(custom ? 'trackCustom' : 'track', ev, d || {}, { eventID: ATTR.event_id + '-' + ev }); } catch(e){}
 }
+
+/* correspondance pub → page */
+const motEl = document.getElementById('mot');
+const motUrl = CONFIG.mots[(params.get('n') || '').toLowerCase()];
+if (motUrl) motEl.textContent = motUrl;
 
 /* ============================================================
    MOTEUR
    ============================================================ */
-const KEY = 'promoloco_form_v2';
-const R = {};
+const KEY = 'promoloco_form_v3';
 const screens = [...document.querySelectorAll('.screen')];
 const byKey = k => screens.find(s => s.dataset.key === k);
 const card = document.getElementById('formulaire');
+const intro = document.getElementById('intro');
+const below = document.getElementById('below');
 let cur = 0, history = [];
 
 function save(){ try { localStorage.setItem(KEY, JSON.stringify({ R, cur, history })); } catch(e){} }
@@ -576,7 +510,7 @@ function load(){
     const i = typeof d.cur === 'number' && screens[d.cur] ? d.cur : 0;
     if (screens[i].dataset.key === 'fin') return false;
     Object.assign(R, d.R);
-    history = Array.isArray(d.history) ? d.history : [];
+    history = Array.isArray(d.history) ? d.history.filter(n => screens[n]) : [];
     return i;
   } catch(e){ return false; }
 }
@@ -604,12 +538,20 @@ function calcule(){
 
 function paint(){
   const p = path();
-  const idx = p.indexOf(screens[cur]);
-  const fin = screens[cur].dataset.key === 'fin';
+  const s = screens[cur];
+  const idx = p.indexOf(s);
+  const fin = s.dataset.key === 'fin';
   const tot = p.length - 1;
-  document.getElementById('bar').style.width = (fin ? 100 : Math.max(4, Math.round((idx / tot) * 100))) + '%';
+  document.getElementById('bar').style.width = (fin ? 100 : Math.max(5, Math.round((idx / tot) * 100))) + '%';
   document.getElementById('steps').textContent = fin ? 'Terminé' : 'Question ' + (idx + 1) + ' sur ' + tot;
   document.getElementById('back').hidden = history.length === 0 || fin;
+  const reste = tot - idx - 1;
+  document.getElementById('left-hint').textContent = reste > 1 ? 'Plus que ' + reste + ' questions.' : 'Plus qu\'une question.';
+  document.getElementById('niche-sub').textContent = tot + ' questions rapides, moins de 2 minutes.';
+  // l'accroche et la preuve servent l'écran 1 ; ensuite, seulement le formulaire
+  const first = s.dataset.key === 'niche';
+  intro.classList.toggle('vh', !first);
+  below.hidden = !first;
 }
 
 function markChosen(s){
@@ -625,10 +567,10 @@ function show(i, instant){
   markChosen(s);
   paint();
   if (s.dataset.key === 'fin') finir(); else save();
+  window.dataLayer.push({ event:'form_step', step: s.dataset.key });
   if (instant) return;
-  // ramène le haut du formulaire à l'écran s'il est sorti de la vue (mobile surtout)
   const top = card.getBoundingClientRect().top;
-  if (top < 0 || top > window.innerHeight * 0.4) {
+  if (top < 0 || top > window.innerHeight * 0.35) {
     try { card.scrollIntoView({ behavior:'smooth', block:'start' }); } catch(e){ card.scrollIntoView(); }
   }
   const h = s.querySelector('#fin-go:not([hidden]) .q, #fin-hold:not([hidden]) .q') || s.querySelector('.q');
@@ -647,61 +589,85 @@ screens.forEach(s => {
   if (s.dataset.type !== 'choice') return;
   const key = s.dataset.key;
   s.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
-    if (busy) return;
+    if (busy || !s.classList.contains('on')) return;
     s.querySelectorAll('.opt').forEach(o => o.setAttribute('aria-pressed', 'false'));
     b.setAttribute('aria-pressed', 'true');
     R[key] = b.dataset.v;
     if (key === 'service' && b.dataset.v !== 'public') delete R.marques;
     if (key === 'niche' && b.dataset.v !== 'concession') { delete R.service; delete R.marques; delete R.groupe; }
+    if (key === 'niche' && !motUrl) motEl.textContent = CONFIG.mots[b.dataset.v] || 'garage';
     save(); busy = true;
-    setTimeout(() => { busy = false; next(); }, 220);
+    setTimeout(() => { busy = false; next(); }, 200);
   }));
 });
 
 /* clavier : 1..9 choisit une option */
 document.addEventListener('keydown', e => {
-  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.metaKey || e.ctrlKey || e.altKey || e.isComposing) return;
   const ae = document.activeElement;
   if (ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)) return;
   const n = parseInt(e.key, 10);
   if (!n) return;
-  const r = card.getBoundingClientRect();
-  if (r.bottom < 0 || r.top > window.innerHeight) return;
   const opts = screens[cur].querySelectorAll('.opt');
   if (opts[n - 1]) { e.preventDefault(); opts[n - 1].click(); }
 });
 
-/* téléphone : formatage pendant la frappe */
+/* téléphone : formatage pendant la frappe (accepte +1, parenthèses, tirets, autofill) */
 const tel = document.getElementById('f-tel');
-tel.addEventListener('input', () => {
-  let d = tel.value.replace(/\D/g, '');
-  if (d.length === 11 && d[0] === '1') d = d.slice(1);
-  d = d.slice(0, 10);
-  tel.value = d.length > 6 ? `${d.slice(0,3)} ${d.slice(3,6)}-${d.slice(6)}`
-            : d.length > 3 ? `${d.slice(0,3)} ${d.slice(3)}` : d;
+const digits = v => { let d = v.replace(/\D/g, ''); if (d.length === 11 && d[0] === '1') d = d.slice(1); return d; };
+function fmtTel(){
+  const d = digits(tel.value).slice(0, 10);
+  tel.value = d.length > 6 ? `${d.slice(0,3)} ${d.slice(3,6)}-${d.slice(6)}` : d.length > 3 ? `${d.slice(0,3)} ${d.slice(3)}` : d;
+}
+tel.addEventListener('input', fmtTel);
+
+const fields = {
+  nom:   { el: document.getElementById('f-nom'),   err: document.getElementById('e-nom'),
+           test: v => v.trim().length >= 2, msg: 'Écris ton prénom et ton nom.' },
+  tel:   { el: tel,                                err: document.getElementById('e-tel'),
+           test: v => digits(v).length === 10, msg: 'Entre un numéro à 10 chiffres, par exemple 514 555-0123.' },
+  email: { el: document.getElementById('f-email'), err: document.getElementById('e-email'),
+           test: v => /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(v.trim()), msg: 'Vérifie ton courriel, il semble incomplet.' }
+};
+const ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 7v6M12 16.5v.5"/></svg>';
+function check(k, reveal){
+  const f = fields[k], ok = f.test(f.el.value);
+  if (ok || reveal) {
+    f.el.setAttribute('aria-invalid', String(!ok));
+    f.err.innerHTML = ok ? '' : ICON + '<span>' + f.msg + '</span>';
+    f.err.classList.toggle('on', !ok);
+  }
+  return ok;
+}
+// Les erreurs n'apparaissent qu'après un premier essai d'envoi : afficher une erreur à la sortie
+// d'un champ décale le bouton sous le doigt et fait rater le tap sur mobile.
+let tried = false;
+Object.keys(fields).forEach(k => {
+  fields[k].el.addEventListener('blur', () => { if (tried) check(k, true); });
+  fields[k].el.addEventListener('input', () => { if (fields[k].el.getAttribute('aria-invalid') === 'true') check(k, true); });
 });
 
-/* coordonnées : le lead est enregistré ici */
+let sent = false;
 document.getElementById('form').addEventListener('submit', e => {
   e.preventDefault();
-  if (screens[cur].dataset.key !== 'contact') return;
-  const nomEl = document.getElementById('f-nom'), emEl = document.getElementById('f-email');
-  const nom = nomEl.value.trim(), telD = tel.value.replace(/\D/g, ''), email = emEl.value.trim();
-  const err = document.getElementById('err-contact');
-  const bad = (el, msg) => { err.textContent = msg; el.setAttribute('aria-invalid','true'); el.focus(); };
-  [nomEl, tel, emEl].forEach(el => el.removeAttribute('aria-invalid'));
-  if (nom.length < 2)   return bad(nomEl, 'Écris ton prénom et ton nom.');
-  if (telD.length < 10) return bad(tel, 'Entre un numéro à 10 chiffres, par exemple 514 555-0123.');
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email)) return bad(emEl, 'Vérifie ton courriel, il semble incomplet.');
-  err.textContent = '';
+  if (screens[cur].dataset.key !== 'contact' || sent) return;
+  tried = true;
+  const bad = Object.keys(fields).filter(k => !check(k, true));
+  if (bad.length) { fields[bad[0]].el.focus(); return; }
+  sent = true;
+  const btn = document.getElementById('go-contact'); btn.disabled = true;
+  if (document.getElementById('f-site').value) R.bot = true;   // pot de miel
+  const nom = fields.nom.el.value.trim(), telD = digits(tel.value), email = fields.email.el.value.trim();
   Object.assign(R, { nom, tel: telD, email });
   post('contact', { nom, tel: telD, email, niche: R.niche });
   track('Lead', { content_category: R.niche });
+  window.dataLayer.push({ event:'lead', niche: R.niche });
   next();
+  setTimeout(() => { btn.disabled = false; sent = false; }, 800);
 });
-/* Entrée dans un champ : passe au suivant au lieu de soumettre trop tôt */
-['f-nom','f-tel'].forEach((id, i, a) => document.getElementById(id).addEventListener('keydown', e => {
-  if (e.key === 'Enter') { e.preventDefault(); document.getElementById(i === 0 ? 'f-tel' : 'f-email').focus(); }
+/* Entrée : passe au champ suivant au lieu de soumettre trop tôt */
+[['f-nom','f-tel'],['f-tel','f-email']].forEach(([a, b]) => document.getElementById(a).addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); document.getElementById(b).focus(); }
 }));
 
 function calendrier(){
@@ -715,7 +681,6 @@ function calendrier(){
   f.id = id + '_' + Date.now();
   f.title = 'Réserver ton appel avec PromoLoco';
   f.setAttribute('scrolling', 'no');
-  f.loading = 'eager';
   box.appendChild(f);
   if (!document.getElementById('ghl-embed')) {
     const s = document.createElement('script');
@@ -736,6 +701,7 @@ function finir(){
   post('fin', { ...R, note, motifs, qualifie: ok });
   track('CompleteRegistration', { content_category: R.niche });
   if (ok) track('LeadQualifie', { content_category: R.niche, value: note }, true);
+  window.dataLayer.push({ event:'form_complete', niche: R.niche, qualifie: ok });
   try { localStorage.removeItem(KEY); } catch(e){}
 }
 
@@ -748,34 +714,33 @@ document.getElementById('to-form').addEventListener('click', e => {
 
 /* reprise */
 const resume = load();
-if (resume !== false) show(resume, true); else paint();
+if (resume !== false) {
+  if (R.niche && !motUrl) motEl.textContent = CONFIG.mots[R.niche] || 'garage';
+  ['nom','email'].forEach(k => { if (R[k]) fields[k].el.value = R[k]; });
+  if (R.tel) { tel.value = R.tel; fmtTel(); }
+  show(resume, true);
+} else paint();
 
 /* ============================================================
-   LA CARTE DU QUARTIER — portes cognées autour du garage
+   LE QUARTIER — portes cognées autour du garage (décor)
    ============================================================ */
 (function(){
   const svg = document.getElementById('map');
-  if (!svg || !svg.getClientRects().length) return;
+  if (!svg) return;
   const NS = 'http://www.w3.org/2000/svg';
   const el = (t, a) => { const n = document.createElementNS(NS, t); for (const k in a) n.setAttribute(k, a[k]); return n; };
   let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-  const cx = 320, cy = 168, g = el('g', { transform:'rotate(-14 ' + cx + ' ' + cy + ')' });
+  const cx = 470, cy = 150, g = el('g', { transform:'rotate(-14 ' + cx + ' ' + cy + ')' });
   const street = 16, widths = [92, 70, 110, 64, 96, 78, 104, 70, 88], heights = [58, 76, 52, 84, 60, 72, 56];
   const houses = [];
-  let y = -150;
-  for (let r = 0; y < 520; r++) {
+  let y = -220;
+  for (let r = 0; y < 820; r++) {
     const h = heights[r % heights.length];
-    let x = -170 + (r % 2) * 34;
-    for (let c = 0; x < 820; c++) {
+    let x = -260 + (r % 2) * 34;
+    for (let c = 0; x < 900; c++) {
       const w = widths[(c + r * 3) % widths.length];
-      const mx = x + w / 2, my = y + h / 2;
-      const isGarage = Math.abs(mx - cx) < w / 2 && Math.abs(my - cy) < h / 2;
-      g.appendChild(el('rect', { x, y, width:w, height:h, rx:5, class:'blk', style: isGarage ? 'fill:#3A1813' : '' }));
-      if (!isGarage) {
-        for (let hx = x + 6; hx < x + w - 10; hx += 13) {
-          houses.push([hx, y + 5]); houses.push([hx, y + h - 13]);
-        }
-      }
+      g.appendChild(el('rect', { x, y, width:w, height:h, rx:5, class:'blk' }));
+      for (let hx = x + 6; hx < x + w - 10; hx += 13) { houses.push([hx, y + 5]); houses.push([hx, y + h - 13]); }
       x += w + street;
     }
     y += h + street;
@@ -783,23 +748,17 @@ if (resume !== false) show(resume, true); else paint();
   const reduce = (() => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){ return false; } })();
   houses.forEach(([hx, hy]) => {
     const d = Math.hypot(hx - cx, hy - cy);
-    if (d > 520) return;
-    const knocked = d < 330 && rnd() < 0.85 - d / 600;
-    const win = knocked && rnd() < 0.22;
+    if (d > 700) return;
+    const knocked = d < 420 && rnd() < 0.8 - d / 700;
+    const win = knocked && rnd() < 0.2;
     const r = el('rect', { x:hx, y:hy, width:8, height:8, rx:1.5, class:'h' });
     if (knocked) {
-      if (reduce) r.setAttribute('style', 'fill:' + (win ? '#FA1909' : '#57544E'));
-      else { r.classList.add(win ? 'win' : 'go'); r.style.animationDelay = (0.5 + d / 190).toFixed(2) + 's'; }
+      if (reduce) r.setAttribute('style', 'fill:' + (win ? '#B8170A' : '#46443F'));
+      else { r.classList.add(win ? 'win' : 'go'); r.style.animationDelay = (0.3 + d / 220).toFixed(2) + 's'; }
     }
     g.appendChild(r);
   });
   svg.appendChild(g);
-  if (!reduce) svg.appendChild(el('circle', { cx, cy, r:14, class:'pulse' }));
-  // le pin du logo, droit, au-dessus du garage
-  const pin = el('g', { transform:'translate(' + (cx - 17) + ' ' + (cy - 46) + ')' });
-  pin.appendChild(el('path', { d:'M17 0C7.6 0 0 7.6 0 17c0 12.2 17 29 17 29s17-16.8 17-29C34 7.6 26.4 0 17 0z', fill:'#FA1909' }));
-  pin.appendChild(el('circle', { cx:17, cy:16.5, r:7.5, fill:'none', stroke:'#F6F4F0', 'stroke-width':3.4 }));
-  svg.appendChild(pin);
 })();
 </script>
 </body>
