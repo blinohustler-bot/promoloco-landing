@@ -1,7 +1,13 @@
 # PromoLoco — formulaire partenaire B2B
 
-Maquette fonctionnelle du tunnel de qualification. **Structure + 70 % du look.**
-Ouvre `index.html` dans un navigateur, il n'y a rien à installer.
+Tunnel de qualification des partenaires PromoLoco.
+Projet Next.js (App Router, TypeScript) :
+
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # build de production
+```
 
 **Pour :** Hugo · **De :** TPS Digital Services · **Date :** 2026-09-17
 
@@ -14,10 +20,18 @@ Un formulaire multi-étapes qui remplace le formulaire instantané Meta actuel. 
 1. demande la **niche** (1 tap, 7 choix) ;
 2. prend les **coordonnées** — et **c'est là que le lead est enregistré**, pas à la fin ;
 3. pose **4 questions de tri** (6 en concession) ;
-4. calcule une **note sur 10** ;
-5. affiche le **calendrier** si la note atteint 6, sinon un message de rappel.
+4. calcule une **note sur 10** — jamais montrée au prospect ;
+5. affiche le **calendrier GHL** de sa niche si la note atteint 6, sinon un message de rappel.
 
-Tout est dans un seul fichier, sans dépendance, sans build. Le JS est en bas de `index.html`.
+| Fichier | Contenu |
+|---|---|
+| `lib/config.ts` | `CONFIG` (seuil, poids, verrous) et `calcule()` |
+| `lib/screens.ts` | les écrans, leurs options et les règles d'affichage (`only`, `requires`) |
+| `lib/tracking.ts` | attribution + coquilles d'événements à brancher |
+| `components/PartnerForm.tsx` | le moteur : navigation, reprise, validation, écran de fin |
+| `components/Pitch.tsx` | l'argumentaire (colonne de gauche sur desktop, étapes 1-2 sur mobile) |
+| `components/Calendar.tsx` | l'iframe de réservation GHL |
+| `app/globals.css` | tout le style |
 
 ---
 
@@ -44,7 +58,7 @@ intérêt à fausser.
 
 ### 1. Les événements Meta
 
-Quatre coquilles vides en haut du `<script>` :
+Quatre coquilles vides dans `lib/tracking.ts` :
 
 ```js
 function postPartial(d){ … }              // POST vers GHL : créer le contact
@@ -83,22 +97,30 @@ Celui du navigateur sert à tester. L'objet `CONFIG` se recopie tel quel au back
 **Le seuil et les poids se lisent dans une config, jamais en dur** — ils vont changer dès qu'on
 aura des données de closing.
 
-### 4. Le calendrier
+### 4. Le calendrier — branché, à valider
 
-Un bloc pointillé attend à la fin. Les trois widgets GHL :
+Les widgets GHL sont intégrés à la fin (`CONFIG.calendriers`) :
 
 | Niche | Widget |
 |---|---|
 | mécanique | `xbtFcS6Os4ebiQWkWvcc` |
 | lave-auto | `y0RvpgktjxatzaAerrkX` |
 | concession | `bFYAzyGJOaRAcae6dbMV` |
+| esthétique, carrosserie, pneus, autre | mécanique par défaut (`CONFIG.calendrierParDefaut`) |
+
+L'iframe reçoit `first_name`, `last_name`, `email` et `phone` en paramètres pour préremplir
+la réservation — **à vérifier que GHL les applique** sur ces calendriers.
 
 ### 5. Le reste du look
 
-- **Les vraies polices.** Le site tourne sur **Clash Display** (titres) et **Satoshi** (texte),
-  servies par Fontshare. Ici ce sont des substituts Google (Archivo + Plus Jakarta Sans).
-- **Le vrai logo.** Il est redessiné en SVG inline pour que le fichier soit autonome. ⚠️ Le seul
-  fichier qu'on a est en **lettres blanches** — pour fond sombre seulement.
+- **Les polices** : **Barlow Condensed** (titres) et **Barlow** (texte), servies par `next/font`.
+  Barlow est dessinée d'après la signalisation routière — le registre de l'auto. Le site live est
+  en Clash Display + Satoshi : à aligner si on garde ce choix.
+- **Le fond** (`components/Backdrop.tsx`) : un quartier vu du ciel, des trajets rouges qui
+  convergent vers le commerce, derrière la carte du formulaire. Figé si « réduire les animations ».
+- **Le logo** est le vrai, en PNG 460×180. `public/logo.png` a les lettres repassées en blanc
+  pour le fond sombre ; `public/logo-fond-clair.png` est l'original (lettres noires). Un SVG
+  vectoriel serait plus net sur grand écran, si on peut l'obtenir.
 - **La VSL** au-dessus de l'écran 1, si on garde le format actuel de la page.
 
 ---
@@ -128,13 +150,13 @@ réclame en personne. En dessous, c'est structurel — pas une question de point
 
 **Le seuil de 6 est un paramètre, pas une constante.** On n'a aucune donnée de closing pour le
 fixer. Semaines 1 et 2 : on note tout le monde mais **tout le monde voit le calendrier**, puis on
-place le seuil sur la distribution réelle.
+place le seuil sur la distribution réelle. C'est l'interrupteur `CONFIG.calendrierPourTous`.
 
 ---
 
 ## Compatibilité
 
-Testé à 375 px (iPhone SE), 768 px (iPad) et 1280 px (ordinateur). Ce qui est géré :
+Testé à 390 px (téléphone), 768 px (iPad) et 1440 px (ordinateur). Ce qui est géré :
 
 - champs à 16 px — sous ce seuil, iOS zoome de force à la mise au point ;
 - `env(safe-area-inset-*)` pour les encoches en paysage ;
@@ -152,8 +174,36 @@ formulaire. Rien n'est envoyé avant la fin de l'écran 2.
 
 ## Le panneau de test
 
-En bas de la page, « Panneau de test » montre en direct les réponses, les verrous déclenchés, la
-note et les événements tirés. À enlever avant la mise en ligne, ou à cacher derrière `?debug=1`.
+Ajoute `?debug=1` à l'adresse : un panneau sous le formulaire montre en direct les réponses, les
+verrous déclenchés, la note et les événements tirés. Invisible sans ce paramètre.
+
+---
+
+## Choix d'interface
+
+- **La note n'est pas montrée au prospect.** Un « 3/10 » à l'écran est vexant pour quelqu'un
+  qu'on rappelle quand même, et la note va passer au serveur. Elle reste dans `?debug=1`.
+- **Desktop** : l'argumentaire (titre, chiffres, garanties) est à gauche en permanence, le
+  formulaire à droite. **Mobile** : l'accroche est sur l'écran 1, les chiffres de preuve sur
+  l'écran 2 — c'est là qu'on hésite. Ce sont les chiffres publiés : 50+ partenaires, 4,9/5, 340+
+  représentants.
+- **Le retour est en haut**, à côté du compteur d'étapes. Le glissement change de sens au retour.
+- **Le téléphone se formate tout seul** ; les erreurs s'affichent sous chaque champ.
+- **Les touches 1 à 9** choisissent une option au clavier (masquées sur mobile) ; Entrée valide
+  l'écran 2.
+
+## Ce qui a été coupé, et pourquoi
+
+La règle : **une question mérite sa place seulement si sa réponse change ce qu'on fait avant
+l'appel.**
+
+1. **« Autour de ton commerce, c'est plutôt… »** — valait 0 point, parce qu'on ne connaît pas le
+   rayon réel du porte-à-porte. Elle revient le jour où Étienne donne le rayon.
+2. **« Combien de baies / véhicules par semaine »** — double emploi avec « combien de nouveaux
+   clients de plus par mois », qui mesure la capacité *disponible*, la seule qui compte.
+
+Résultat : **6 questions en mécanique (avant 8), 9 en concession (avant 11)**, sous les 90 secondes.
+La longueur ne coûte pas de leads : le lead est enregistré à l'écran 2, et l'écran 1 est un tap.
 
 ---
 
