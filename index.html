@@ -17,19 +17,27 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://api.leadconnectorhq.com">
+<!-- préchargement : les polices arrivent avant le premier rendu, le texte ne « saute » pas -->
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://cdn.fontshare.com/wf/FPDAZ2S6SW4QMSRIIKNNGTPM6VIXYMKO/5HNPQ453FRLIQWV2FNOBUU3FKTDZQVSG/Z3MGHFHX6DCTLQ55LJYRJ5MDCZPMFZU6.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://cdn.fontshare.com/wf/TTX2Z3BF3P6Y5BQT3IV2VNOK6FL22KUT/7QYRJOI3JIMYHGY6CH7SOIFRQLZOLNJ6/KFIAZD4RUMEZIYV6FQ3T3GP5PDBDB6JY.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://cdn.fontshare.com/wf/P2LQKHE6KA6ZP4AAGN72KDWMHH6ZH3TA/ZC32TK2P7FPS5GFTL46EU6KQJA24ZYDB/7AHDUZ4A7LFLVFUIFSARGIWCRQJHISQP.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://cdn.fontshare.com/wf/LAFFD4SDUCDVQEXFPDC7C53EQ4ZELWQI/PXCT3G6LO6ICM5I3NTYENYPWJAECAWDD/GHM6WVH6MILNYOOCXHXB5GTSGNTMGXZR.woff2">
 <!-- Fontshare ne sert qu'une famille par requête -->
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@600&display=swap">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&text=PROMLC&display=block">
 <style>
+  /* polices de repli calées sur les dimensions de Satoshi et Clash (écart de largeur mesuré contre Arial) */
+  @font-face{font-family:"Satoshi Fallback"; src:local("Arial"); size-adjust:98.5%; ascent-override:98%; descent-override:26%; line-gap-override:0%}
+  @font-face{font-family:"Clash Fallback"; src:local("Arial Bold"), local("Arial-BoldMT"), local("Arial"); font-weight:600; size-adjust:103%; ascent-override:92%; descent-override:22%; line-gap-override:0%}
   :root{
     --bg:#131312; --bg-2:#1A1A18; --card:#201F1D; --card-hi:#282725;
     --line:#302F2C; --line-2:#4A4843;
     --ink:#F6F4F0; --ink-2:#C9C4BC; --muted:#948F86;
     --red:#FA1909; --red-2:#FF5246; --red-soft:#2C0F0B; --red-glow:rgba(250,25,9,.26);
     --ok:#3FD37E;
-    --display:"Clash Display","Arial Narrow",Arial,sans-serif;
-    --text:"Satoshi",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    --display:"Clash Display","Clash Fallback",Arial,sans-serif;
+    --text:"Satoshi","Satoshi Fallback",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
     --r:12px;
     color-scheme:dark;
   }
