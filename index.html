@@ -179,10 +179,28 @@
   /* ---------- preuve sous le formulaire (écran 1) ---------- */
   .below[hidden]{display:none}
   .below h2{font-family:var(--display); font-weight:600; font-size:24px; line-height:1.15; letter-spacing:.004em; margin:44px 0 14px}
-  .reviews{display:grid; gap:10px}
-  .review{margin:0; background:var(--bg-2); border:1px solid var(--line); border-radius:14px; padding:16px}
+  .rv-head{display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin:44px 0 14px}
+  .below .rv-head h2{margin:0}
+  .rv-nav{display:flex; gap:8px; flex:0 0 auto}
+  .rv-btn{width:44px; height:44px; border-radius:50%; border:1px solid var(--line-2); background:var(--bg-2); color:var(--ink);
+    display:grid; place-items:center; cursor:pointer; transition:border-color .15s, opacity .15s}
+  .rv-btn:hover{border-color:var(--muted)}
+  .rv-btn[disabled]{opacity:.35; cursor:default}
+  .reviews{display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-padding-inline:16px;
+    overscroll-behavior-x:contain; scrollbar-width:none; -webkit-overflow-scrolling:touch; margin-inline:-16px; padding-inline:16px;
+    scroll-behavior:smooth}
+  .reviews::-webkit-scrollbar{display:none}
+  .reviews:focus-visible{outline:2px solid var(--red-2); outline-offset:4px; border-radius:14px}
+  .review{margin:0; background:var(--bg-2); border:1px solid var(--line); border-radius:14px; padding:18px;
+    flex:0 0 86%; scroll-snap-align:start; display:flex; flex-direction:column}
+  @media (min-width:560px){ .reviews{margin-inline:0; padding-inline:0; scroll-padding-inline:0} .review{flex-basis:88%} }
+  .review figcaption{margin-top:auto}
+  .rv-dots{display:flex; justify-content:center; gap:0; margin-top:8px}
+  .rv-dot{width:36px; height:40px; border:0; background:none; padding:0; cursor:pointer; display:grid; place-items:center}
+  .rv-dot::before{content:""; width:8px; height:8px; border-radius:99px; background:var(--line-2); transition:width .25s, background .25s}
+  .rv-dot[aria-current="true"]::before{width:22px; background:var(--red)}
   .review .stars{color:var(--red); letter-spacing:1px; font-size:13.5px}
-  .review blockquote{margin:6px 0 12px; font-size:15.5px; line-height:1.5; color:var(--ink)}
+  .review blockquote{margin:8px 0 16px; font-size:16px; line-height:1.5; color:var(--ink)}
   .review figcaption{display:flex; align-items:center; gap:10px}
   .avatar{width:36px; height:36px; border-radius:50%; background:var(--card-hi); border:1px solid var(--line-2);
     display:grid; place-items:center; font-weight:700; font-size:12.5px; color:var(--ink-2); flex:0 0 auto}
@@ -380,46 +398,59 @@
     </div>
 
     <div class="below" id="below">
-      <h2>Ce que nos partenaires en disent</h2>
-      <div class="reviews">
-        <figure class="review">
+      <section aria-roledescription="carrousel" aria-labelledby="t-avis">
+      <div class="rv-head">
+        <h2 id="t-avis">Nos partenaires en parlent</h2>
+        <div class="rv-nav">
+          <button type="button" class="rv-btn" id="rv-prev" aria-label="Avis précédent" aria-controls="rv-track"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button type="button" class="rv-btn" id="rv-next" aria-label="Avis suivant" aria-controls="rv-track"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+      </div>
+      <div class="reviews" id="rv-track" tabindex="0" aria-label="Avis de partenaires, glisse pour voir les autres">
+        <figure class="review" aria-roledescription="avis" aria-label="1 sur 3">
           <span class="stars" aria-label="5 étoiles sur 5">★★★★★</span>
           <blockquote>Au départ, j'étais sceptique. Aller chercher 1&nbsp;500 clients pour notre atelier, ça me paraissait gros. Promoloco m'a prouvé le contraire, et à date, c'est notre meilleure année au niveau des services offerts.</blockquote>
           <figcaption><span class="avatar" aria-hidden="true">HS</span><span class="who"><b>Honda Saint-Jean</b><span>Concessionnaire, Saint-Jean-sur-Richelieu</span></span></figcaption>
         </figure>
-        <figure class="review">
+        <figure class="review" aria-roledescription="avis" aria-label="2 sur 3">
           <span class="stars" aria-label="5 étoiles sur 5">★★★★★</span>
           <blockquote>On a travaillé avec Promoloco sur plusieurs contrats et l'expérience a été excellente à chaque fois. Ils nous ont aidés à élargir notre clientèle dans l'ensemble de nos garages et concessions.</blockquote>
           <figcaption><span class="avatar" aria-hidden="true">GP</span><span class="who"><b>Groupe Paquet</b><span>Concessionnaire, Lévis</span></span></figcaption>
         </figure>
-        <figure class="review">
+        <figure class="review" aria-roledescription="avis" aria-label="3 sur 3">
           <span class="stars" aria-label="5 étoiles sur 5">★★★★★</span>
           <blockquote>Promoloco nous a vraiment aidés à développer notre clientèle locale du coin.</blockquote>
           <figcaption><span class="avatar" aria-hidden="true">SW</span><span class="who"><b>SW Performance</b><span>Garage, Longueuil</span></span></figcaption>
         </figure>
       </div>
+      <div class="rv-dots" id="rv-dots">
+        <button type="button" class="rv-dot" aria-label="Avis 1 sur 3" aria-current="true"></button>
+        <button type="button" class="rv-dot" aria-label="Avis 2 sur 3"></button>
+        <button type="button" class="rv-dot" aria-label="Avis 3 sur 3"></button>
+      </div>
+      </section>
 
-      <h2>Questions fréquentes</h2>
+      <h2 class="faq-title">Questions fréquentes</h2>
       <div class="faq">
         <details name="faq">
-          <summary>Comment vous êtes payés&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
-          <div class="ans"><p>Uniquement à la performance. Tu payes pour chaque client livré à ton atelier : aucun abonnement, aucun forfait minimum, aucun frais caché.</p></div>
+          <summary>Combien ça me coûte&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
+          <div class="ans"><p>Tu payes seulement pour chaque client qui se présente à ton garage. Pas d'abonnement, pas de minimum, pas de frais d'entrée. Si personne ne vient, tu payes rien.</p></div>
         </details>
         <details name="faq">
-          <summary>Et si un client ne se présente pas&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
-          <div class="ans"><p>Tu payes seulement pour les clients qui se présentent réellement chez vous. Les promotions non réclamées ne te coûtent rien. En pratique, 94&nbsp;% des clients se présentent dans les 21&nbsp;jours suivant l'activation.</p></div>
+          <summary>Qu'est-ce qui arrive si le client ne vient jamais&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
+          <div class="ans"><p>Rien. Un client qui ne se présente pas ne te coûte pas une cenne. En pratique, 94&nbsp;% des clients se présentent dans les 21&nbsp;jours.</p></div>
         </details>
         <details name="faq">
-          <summary>Combien de clients vais-je recevoir par mois&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
-          <div class="ans"><p>En moyenne entre 20 et 50 nouveaux clients par mois, jusqu'à 1&nbsp;500 par année pour nos partenaires à fort volume. Ça dépend de ton territoire, de ta capacité d'accueil et de la saison. On fixe ensemble une cadence réaliste pendant l'appel.</p></div>
+          <summary>Combien de nouveaux clients je peux recevoir par mois&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
+          <div class="ans"><p>Entre 20 et 50 en moyenne, et jusqu'à 1&nbsp;500 par année pour les ateliers à fort volume. Le chiffre dépend de ton territoire, de la saison et de ce que ton équipe peut absorber. On le fixe avec toi pendant l'appel.</p></div>
         </details>
         <details name="faq">
           <summary>Pourquoi un seul garage par secteur&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
-          <div class="ans"><p>Nos représentants présentent un seul commerce aux gens du quartier. Si on présentait deux garages voisins, on travaillerait contre toi. Le formulaire sert à vérifier si ton secteur est encore libre.</p></div>
+          <div class="ans"><p>Nos représentants présentent un seul commerce aux gens du quartier. Si on présentait aussi ton voisin, on travaillerait contre toi. Le formulaire sert justement à vérifier si ton secteur est encore libre.</p></div>
         </details>
         <details name="faq">
-          <summary>Comment je sais si c'est rentable&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
-          <div class="ans"><p>Chaque partenaire a accès à un tableau de bord en temps réel : clients livrés, services activés, revenu généré, retour sur investissement. Tu sais exactement quand augmenter le volume.</p></div>
+          <summary>Comment je vois ce que ça me rapporte&nbsp;?<span class="pm" aria-hidden="true"></span></summary>
+          <div class="ans"><p>Tu as accès à un tableau de bord en temps réel : les clients qui sont venus, les services qu'ils ont pris et le revenu que ça t'a rapporté. Tu vois tout de suite quand ça vaut la peine d'augmenter le volume.</p></div>
         </details>
       </div>
 
@@ -728,6 +759,48 @@ if (resume !== false) {
   if (R.tel) { tel.value = R.tel; fmtTel(); }
   show(resume, true);
 } else paint();
+
+/* ============================================================
+   CARROUSEL DES AVIS — glisser, flèches, points
+   ============================================================ */
+(function(){
+  const track = document.getElementById('rv-track');
+  const slides = [...track.querySelectorAll('.review')];
+  const dots = [...document.querySelectorAll('.rv-dot')];
+  const prev = document.getElementById('rv-prev'), next = document.getElementById('rv-next');
+  let idx = 0;
+  const go = i => {
+    i = Math.max(0, Math.min(slides.length - 1, i));
+    track.scrollTo({ left: slides[i].offsetLeft - slides[0].offsetLeft, behavior: 'smooth' });
+    set(i);
+  };
+  function set(i){
+    idx = i;
+    dots.forEach((d, k) => d.setAttribute('aria-current', String(k === i)));
+    prev.disabled = i === 0; next.disabled = i === slides.length - 1;
+  }
+  prev.addEventListener('click', () => go(idx - 1));
+  next.addEventListener('click', () => go(idx + 1));
+  dots.forEach((d, k) => d.addEventListener('click', () => go(k)));
+  track.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(idx + 1); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); go(idx - 1); }
+  });
+  // synchro quand on glisse au doigt : scrollsnapchange (Chrome/Edge), sinon IntersectionObserver
+  if ('onscrollsnapchange' in window) {
+    track.addEventListener('scrollsnapchange', e => { const k = slides.indexOf(e.snapTargetInline); if (k > -1) set(k); });
+  } else if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) set(slides.indexOf(en.target)); }),
+      { root: track, threshold: 0.6 });
+    slides.forEach(s => io.observe(s));
+  }
+  // repli : fin de défilement
+  let t; track.addEventListener('scroll', () => { clearTimeout(t); t = setTimeout(() => {
+    const x = track.scrollLeft, k = slides.reduce((b, s, j) => Math.abs(s.offsetLeft - slides[0].offsetLeft - x) < Math.abs(slides[b].offsetLeft - slides[0].offsetLeft - x) ? j : b, 0);
+    set(k);
+  }, 120); }, { passive: true });
+  set(0);
+})();
 
 /* ============================================================
    LE QUARTIER — portes cognées autour du garage (décor)
